@@ -1,5 +1,7 @@
 # PE Normotensive Shock EHR Phenotype
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22178354.svg)](https://doi.org/10.5281/zenodo.22178354)
+
 ## Overview
 
 This repository contains the computable phenotype specification and reproducibility code accompanying the manuscript:
@@ -98,7 +100,7 @@ Tests use synthetic marker states and nonidentifying aggregate manuscript consta
 
 ## Citation
 
-Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). The archival DOI will be added after the v1.0.0 release is deposited with Zenodo.
+Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). Version 1.0.0 is archived at Zenodo: https://doi.org/10.5281/zenodo.22178354. The version-specific DOI should be used when citing the code used for the manuscript.
 
 ## License
 

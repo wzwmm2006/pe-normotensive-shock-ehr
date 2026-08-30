@@ -39,4 +39,4 @@ The phenotype logic, item mappings, input contracts, analysis scripts, tests, an
 
 ## Release status
 
-Version 1.0.0 is frozen for manuscript submission. The audited commit is tagged and released on GitHub before archival deposit. The Zenodo DOI is added only after the archive has been created; no DOI is inferred or reserved in advance.
+Version 1.0.0 is frozen for manuscript submission and archived at Zenodo under DOI `10.5281/zenodo.22178354`. The version-specific DOI identifies the exact GitHub release used for the manuscript.
