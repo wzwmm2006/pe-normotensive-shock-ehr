@@ -1,0 +1,8 @@
+variable_name,source_dataset,source_table,itemid/field,unit,operational_definition,role_in_phenotype
+pe_index_time,MIMIC-IV-Ext-PE + MIMIC-IV-Note,radiology,"extension report linkage key; charttime",datetime,"Earliest authoritative parent radiology report time for an acute-positive CTPA report within an encounter",cohort index
+systolic_bp_icu,MIMIC-IV,chartevents,"220179;220050;225309",mmHg,"Valid value greater than 0 and less than 400 within 0-24 hours after the PE index",normotensive ascertainment
+systolic_bp_ed,MIMIC-IV-ED,vitalsign,sbp,mmHg,"Timestamped valid value greater than 0 and less than 400 within 0-24 hours after the PE index",normotensive ascertainment
+lactate,MIMIC-IV,labevents,50813,mmol/L,"Maximum valid value in 0-24 hours; positive when greater than 2",strict domain
+creatinine_delta,MIMIC-IV,labevents,50912,mg/dL,"Maximum later value minus first value in 0-24 hours; requires at least two distinct times; positive when at least 0.3",strict domain
+urine_output,MIMIC-IV,outputevents,"226559;226560;226561;226584;226563;226564;226565;226567;226557;226558;227488;227489",mL/24 h,"Sum of valid events with complete 24-hour structured observation; positive when below 720",strict domain
+cardiac_index,MIMIC-IV,chartevents,228368,L/min/m2,"Minimum valid value in 0-24 hours; positive when at most 2.2",strict domain

@@ -1,0 +1,61 @@
+name: strict_normotensive_shock
+version: 0.1.0
+guideline: "2026 AHA/ACC acute pulmonary embolism guideline"
+analysis_window:
+  start_hours_from_index: 0
+  end_hours_from_index: 24
+
+marker_states:
+  allowed: [TRUE, FALSE, UNKNOWN]
+  TRUE: "Criterion is evaluable and meets its positive threshold."
+  FALSE: "Criterion is evaluable and does not meet its positive threshold."
+  UNKNOWN: "Criterion is not evaluable from the available structured data."
+
+strict_domains:
+  lactate:
+    unit: "mmol/L"
+    evaluability: "At least one valid numeric value in the 0-24-hour window."
+    positive_operator: ">"
+    positive_threshold: 2.0
+    aggregation: "maximum in-window value"
+  creatinine_delta:
+    unit: "mg/dL"
+    evaluability: "At least two valid values at distinct times in the 0-24-hour window."
+    positive_operator: ">="
+    positive_threshold: 0.3
+    interval_hours: 24
+    aggregation: "maximum later value minus first in-window value"
+  urine_output:
+    unit: "mL/24 h"
+    evaluability: "Valid nonnegative events and complete 24-hour structured observation."
+    positive_operator: "<"
+    positive_threshold: 720
+    interval_hours: 24
+    aggregation: "sum over complete window"
+  cardiac_index:
+    unit: "L/min/m2"
+    evaluability: "At least one valid numeric value in the 0-24-hour window."
+    positive_operator: "<="
+    positive_threshold: 2.2
+    aggregation: "minimum in-window value"
+
+phenotype_logic:
+  positive: "any strict-domain state is TRUE"
+  negative: "all four strict-domain states are FALSE"
+  indeterminate: "no strict-domain state is TRUE and at least one is UNKNOWN"
+
+implementation_scenarios:
+  missing_as_false:
+    mapping: "UNKNOWN -> FALSE"
+    note: "Deterministic simulated implementation scenario; not attributed to a specific deployed system."
+  complete_case:
+    rule: "Classify only when all four states are observed."
+  uncertainty_aware:
+    rule: "Preserve TRUE, FALSE, and UNKNOWN and apply phenotype_logic."
+
+excluded_from_strict_phenotype:
+  - mean arterial pressure
+  - Glasgow Coma Scale
+  - vasopressor use
+  - ventilation
+  - downstream clinical outcomes

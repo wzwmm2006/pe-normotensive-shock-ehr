@@ -13,8 +13,8 @@ cache/
 *_patient_level*
 *_crosswalk*
 *_cohort_rows*
-*_marker_matrix*
-*_authoritative_index*
+*_marker_matrix.csv
+*_authoritative_index.csv
 
 # Local configuration and credentials
 .env
