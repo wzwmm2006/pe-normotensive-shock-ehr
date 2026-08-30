@@ -23,5 +23,15 @@ def test_nonidentifying_manuscript_aggregate_locks():
         "urine_output": 8,
         "cardiac_index": 0,
     }
+    stricter_bp_n = 668
+    setting_ge3 = {
+        "icu_observable": (25, 295),
+        "ed_only_non_icu": (0, 424),
+    }
     assert max(single_domain_ceiling.values()) == 17
     assert positive_dependence["lactate"] == 32
+    assert stricter_bp_n == 668
+    assert setting_ge3 == {
+        "icu_observable": (25, 295),
+        "ed_only_non_icu": (0, 424),
+    }

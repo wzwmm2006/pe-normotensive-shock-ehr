@@ -1,5 +1,5 @@
 name: strict_normotensive_shock
-version: 0.1.0
+version: 1.0.0
 guideline: "2026 AHA/ACC acute pulmonary embolism guideline"
 analysis_window:
   start_hours_from_index: 0

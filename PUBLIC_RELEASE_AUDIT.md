@@ -2,7 +2,7 @@
 
 Audit date: 2026-08-30
 
-Repository version: 0.1.0
+Repository version: 1.0.0
 
 ## Required Findings
 
@@ -20,7 +20,7 @@ TESTS: PASS (13 passed)
 
 ## Scan Scope
 
-The recursive scan covered tracked-candidate source code, configuration templates, metadata, tests, examples, and documentation. It checked for restricted source identifiers, source-data rows, patient timestamps, local Windows paths, access keys, tokens, passwords, cookies, private keys, database files, compressed extracts, and patient-level table formats.
+The recursive scan covered every tracked source, configuration template, metadata file, test, synthetic example, and documentation file. It checked for restricted source identifiers, source-data rows, patient timestamps, actual local Windows or Unix paths, access keys, tokens, passwords, cookies, private keys, database files, compressed extracts, and patient-level table formats. The `/path/to/...` strings in `config/paths.example.yaml` are documented placeholders, not local filesystem paths.
 
 No unsafe artifact was detected. The four-row example uses synthetic record labels A-D and marker states only.
 
@@ -39,4 +39,4 @@ The repository contains public item mappings, generic local input contracts, ana
 
 SAFE TO PUSH: YES
 
-The repository is safe for code review and a GitHub v0.1.0 branch or commit history. No GitHub push, public release, archival deposit, or DOI creation was performed during this audit.
+The repository is safe to commit, tag, and publish as GitHub release v1.0.0. No archival deposit or DOI creation was performed during this pre-release audit.

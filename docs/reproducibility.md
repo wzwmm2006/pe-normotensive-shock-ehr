@@ -37,6 +37,6 @@ These constants contain no patient-level records and are used only as regression
 
 The phenotype logic, item mappings, input contracts, analysis scripts, tests, and synthetic example are public. Source MIMIC tables, notes, local record keys, intermediate encounter matrices, and patient-level outputs are intentionally excluded. Authorized users can recreate those components within their own secure environment.
 
-## Release plan
+## Release status
 
-Version 0.1.0 is for manuscript and code review. After scientific freeze, the maintainers plan to run a final security audit, update the manuscript citation, create release v1.0.0, archive that release, and add the resulting DOI. No archival release is created at this stage.
+Version 1.0.0 is frozen for manuscript submission. The audited commit is tagged and released on GitHub before archival deposit. The Zenodo DOI is added only after the archive has been created; no DOI is inferred or reserved in advance.

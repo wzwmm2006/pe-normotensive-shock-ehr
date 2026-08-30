@@ -4,9 +4,9 @@
 
 This repository contains the computable phenotype specification and reproducibility code accompanying the manuscript:
 
-> From Guideline Definition to Computable EHR Phenotype: Missing-Data Semantics in the 2026 AHA/ACC Normotensive Shock Definition for Acute Pulmonary Embolism
+> Computability of Guideline-Defined Normotensive Shock in Acute Pulmonary Embolism: Effects of Missing-Data Semantics in Structured EHRs
 
-The code reconstructs the strict four-domain phenotype, compares three treatments of unavailable criteria, calculates the structural recovery frontier, quantifies positive-classification dependence, and generates aggregate tables and figures. Version 0.1.0 is prepared for manuscript review.
+The code reconstructs the strict four-domain phenotype, compares three treatments of unavailable criteria, calculates the structural recovery frontier, quantifies positive-classification dependence, and generates aggregate tables and figures. Version 1.0.0 is the frozen manuscript-submission release.
 
 ## Scientific problem
 
@@ -98,7 +98,7 @@ Tests use synthetic marker states and nonidentifying aggregate manuscript consta
 
 ## Citation
 
-Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). The manuscript DOI will be added after publication.
+Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). The archival DOI will be added after the v1.0.0 release is deposited with Zenodo.
 
 ## License
 
