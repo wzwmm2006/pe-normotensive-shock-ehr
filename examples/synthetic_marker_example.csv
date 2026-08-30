@@ -1,0 +1,5 @@
+record_key,lactate_state,creatinine_delta_state,urine_output_state,cardiac_index_state
+A,TRUE,UNKNOWN,UNKNOWN,UNKNOWN
+B,FALSE,FALSE,FALSE,FALSE
+C,FALSE,UNKNOWN,UNKNOWN,UNKNOWN
+D,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN
