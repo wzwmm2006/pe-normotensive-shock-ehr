@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the repository and the accompanying manuscript."
+title: "PE Normotensive Shock EHR Phenotype"
+version: 0.1.0
+type: software
+authors:
+  - family-names: Zheng
+    given-names: Mingming
+  - family-names: Liu
+    given-names: Liang
+repository-code: "https://github.com/wzwmm2006/pe-normotensive-shock-ehr"
+license: MIT
+keywords:
+  - computable phenotype
+  - electronic health records
+  - pulmonary embolism
+  - missing data

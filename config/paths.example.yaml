@@ -1,0 +1,7 @@
+# Copy to config/paths.yaml and edit locally. The copied file is ignored by Git.
+mimic_iv_root: "/path/to/mimic-iv"
+mimic_note_root: "/path/to/mimic-iv-note"
+mimic_ed_root: "/path/to/mimic-iv-ed"
+ext_pe_root: "/path/to/mimic-iv-ext-pe"
+working_data_root: "/path/to/private-working-data"
+output_root: "outputs"

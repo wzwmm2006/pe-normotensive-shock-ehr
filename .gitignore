@@ -1,0 +1,42 @@
+# Restricted or local data
+data/
+raw/
+derived/
+outputs/
+cache/
+*.parquet
+*.feather
+*.db
+*.duckdb
+*.sqlite
+*.gz
+*_patient_level*
+*_crosswalk*
+*_cohort_rows*
+*_marker_matrix*
+*_authoritative_index*
+
+# Local configuration and credentials
+.env
+.env.*
+credentials*
+secrets*
+*.pem
+*.key
+config/paths.yaml
+
+# Python and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Internal study artifacts
+GATE*
