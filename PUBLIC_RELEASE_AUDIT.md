@@ -39,4 +39,4 @@ The repository contains public item mappings, generic local input contracts, ana
 
 SAFE TO PUSH: YES
 
-The repository is safe to commit, tag, and publish as GitHub release v1.0.1. The cardiac-index repair excludes the NICOM mapping and contains no patient-level record. No v1.0.1 archival deposit or DOI creation was performed during this pre-release audit.
+The repository was committed and published as GitHub release v1.0.1. The cardiac-index repair excludes the NICOM mapping and contains no patient-level record. Zenodo archived the release as `wzwmm2006/pe-normotensive-shock-ehr-v1.0.1.zip` under DOI `10.5281/zenodo.22183069` (md5: `78af9e1f2e162228b4296d82a2ba76a3`).

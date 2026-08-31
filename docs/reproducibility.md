@@ -39,4 +39,4 @@ The phenotype logic, item mappings, input contracts, analysis scripts, tests, an
 
 ## Release status
 
-Version 1.0.0 is frozen for manuscript submission and archived at Zenodo under DOI `10.5281/zenodo.22178354`. The version-specific DOI identifies the exact GitHub release used for the manuscript.
+Version 1.0.1 is the definition-fidelity repair release for manuscript submission and is archived at Zenodo under DOI `10.5281/zenodo.22183069`. The version-specific DOI identifies the exact GitHub release used for the repaired manuscript package.
