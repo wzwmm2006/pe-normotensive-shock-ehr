@@ -5,4 +5,4 @@ systolic_bp_ed,MIMIC-IV-ED,vitalsign,sbp,mmHg,"Timestamped valid value greater t
 lactate,MIMIC-IV,labevents,50813,mmol/L,"Maximum valid value in 0-24 hours; positive when greater than 2",strict domain
 creatinine_delta,MIMIC-IV,labevents,50912,mg/dL,"Maximum later value minus first value in 0-24 hours; requires at least two distinct times; positive when at least 0.3",strict domain
 urine_output,MIMIC-IV,outputevents,"226559;226560;226561;226584;226563;226564;226565;226567;226557;226558;227488;227489",mL/24 h,"Sum of valid events with complete 24-hour structured observation; positive when below 720",strict domain
-cardiac_index,MIMIC-IV,chartevents,228368,L/min/m2,"Minimum valid value in 0-24 hours; positive when at most 2.2",strict domain
+cardiac_index,MIMIC-IV,chartevents,"No faithful mapping; itemid 228368 (Cardiac Index (CI NICOM)) excluded",L/min/m2,"Guideline requires cardiac index derived from peripheral arterial and mixed venous oxygen saturation values; state is UNKNOWN in the study source",strict domain

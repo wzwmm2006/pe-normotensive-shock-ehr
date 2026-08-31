@@ -1,6 +1,6 @@
 def test_nonidentifying_manuscript_aggregate_locks():
     primary_n = 719
-    depth = {0: 488, 1: 131, 2: 75, 3: 25, 4: 0}
+    depth = {0: 488, 1: 131, 2: 76, 3: 24, 4: 0}
     states = {"positive": 49, "indeterminate": 670, "negative": 0}
     missing_burden = {1: 17, 2: 52, 3: 113, 4: 488}
 
@@ -20,18 +20,18 @@ def test_nonidentifying_manuscript_aggregate_locks():
     positive_dependence = {
         "lactate": 32,
         "creatinine_delta": 4,
-        "urine_output": 8,
+        "urine_output": 9,
         "cardiac_index": 0,
     }
     stricter_bp_n = 668
     setting_ge3 = {
-        "icu_observable": (25, 295),
+        "icu_observable": (24, 295),
         "ed_only_non_icu": (0, 424),
     }
     assert max(single_domain_ceiling.values()) == 17
     assert positive_dependence["lactate"] == 32
     assert stricter_bp_n == 668
     assert setting_ge3 == {
-        "icu_observable": (25, 295),
+        "icu_observable": (24, 295),
         "ed_only_non_icu": (0, 424),
     }

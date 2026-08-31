@@ -40,11 +40,13 @@ Use timestamped measurements only. Do not use an untimed triage value for the st
 Required columns:
 
 - `record_key`: local analysis-record key;
-- `domain`: one of `lactate`, `creatinine_delta`, `urine_output`, or `cardiac_index`;
+- `domain`: one of `lactate`, `creatinine_delta`, or `urine_output`; `cardiac_index` may be present in generic inputs but is not evaluated without a faithful guideline-specified source mapping;
 - `hours_from_index`: event time relative to the authoritative PE index;
 - `value`: numeric value in the unit defined by the phenotype specification.
 
 The creatinine rows contain individual creatinine values; the script calculates the serial change. Urine-output values contain nonnegative event amounts. Apply any source-specific correction mapping during authorized local standardization before the public script is run.
+
+The study source exposed a NICOM cardiac-index item, which did not match the guideline-specified oxygen-saturation-derived measurement. The public builder therefore assigns cardiac index UNKNOWN. A future implementation must document and validate the required measurement provenance before enabling that domain.
 
 ### Urine observation coverage
 

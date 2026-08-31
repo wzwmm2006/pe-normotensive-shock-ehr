@@ -77,7 +77,7 @@ def test_strict_marker_matrix_applies_thresholds_and_evaluability():
         "lactate_state": "TRUE",
         "creatinine_delta_state": "TRUE",
         "urine_output_state": "TRUE",
-        "cardiac_index_state": "FALSE",
+        "cardiac_index_state": "UNKNOWN",
     }
     assert result.loc["B", "lactate_state"] == "FALSE"
     assert result.loc["B", "creatinine_delta_state"] == "UNKNOWN"

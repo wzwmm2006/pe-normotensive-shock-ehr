@@ -1,14 +1,12 @@
 # PE Normotensive Shock EHR Phenotype
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22178354.svg)](https://doi.org/10.5281/zenodo.22178354)
-
 ## Overview
 
 This repository contains the computable phenotype specification and reproducibility code accompanying the manuscript:
 
 > Computability of Guideline-Defined Normotensive Shock in Acute Pulmonary Embolism: Effects of Missing-Data Semantics in Structured EHRs
 
-The code reconstructs the strict four-domain phenotype, compares three treatments of unavailable criteria, calculates the structural recovery frontier, quantifies positive-classification dependence, and generates aggregate tables and figures. Version 1.0.0 is the frozen manuscript-submission release.
+The code reconstructs the strict four-domain phenotype, compares three treatments of unavailable criteria, calculates the structural recovery frontier, quantifies positive-classification dependence, and generates aggregate tables and figures. Version 1.0.1 is the definition-fidelity repair release for manuscript submission.
 
 ## Scientific problem
 
@@ -21,7 +19,9 @@ Within 0-24 hours after the authoritative pulmonary embolism index:
 - lactate greater than 2 mmol/L;
 - creatinine increase of at least 0.3 mg/dL within 24 hours;
 - urine output below 720 mL/24 h; or
-- cardiac index at most 2.2 L/min/m2.
+- cardiac index at most 2.2 L/min/m2 derived from peripheral arterial and mixed venous oxygen saturation values.
+
+The published guideline reports the creatinine-change unit as mg/mL. The study retained the numerical threshold of 0.3 and used mg/dL, consistent with the conventional SCAI shock definition. The available MIMIC mapping for cardiac index was itemid 228368 (`Cardiac Index (CI NICOM)`), which did not match the guideline-specified measurement provenance. The mapping is excluded and the cardiac-index domain remains UNKNOWN in the study implementation.
 
 The executable specification is in [`phenotype/normotensive_shock_spec.yaml`](phenotype/normotensive_shock_spec.yaml).
 
@@ -100,7 +100,7 @@ Tests use synthetic marker states and nonidentifying aggregate manuscript consta
 
 ## Citation
 
-Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). Version 1.0.0 is archived at Zenodo: https://doi.org/10.5281/zenodo.22178354. The version-specific DOI should be used when citing the code used for the manuscript.
+Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). The version-specific Zenodo DOI for v1.0.1 will be added after archival deposit.
 
 ## License
 

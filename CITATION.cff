@@ -1,9 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the repository and the accompanying manuscript."
 title: "PE Normotensive Shock EHR Phenotype"
-version: 1.0.0
-date-released: 2026-08-30
-doi: 10.5281/zenodo.22178354
+version: 1.0.1
+date-released: 2026-08-31
 type: software
 authors:
   - family-names: Zheng

@@ -9,6 +9,10 @@ from scripts.phenotype_core import MARKERS
 
 
 def marker_state(values: pd.DataFrame, marker: str, coverage_hours: float | None) -> str:
+    if marker == "cardiac_index":
+        # The available NICOM item does not match the guideline-specified
+        # oxygen-saturation-derived cardiac index, so this domain stays unknown.
+        return "UNKNOWN"
     domain = values[values["domain"] == marker].copy()
     domain = domain[domain["hours_from_index"].between(0, 24, inclusive="both")]
     domain["value"] = pd.to_numeric(domain["value"], errors="coerce")
@@ -18,10 +22,6 @@ def marker_state(values: pd.DataFrame, marker: str, coverage_hours: float | None
         if domain.empty:
             return "UNKNOWN"
         return "TRUE" if domain["value"].max() > 2 else "FALSE"
-    if marker == "cardiac_index":
-        if domain.empty:
-            return "UNKNOWN"
-        return "TRUE" if domain["value"].min() <= 2.2 else "FALSE"
     if marker == "creatinine_delta":
         domain = domain.sort_values("hours_from_index").drop_duplicates("hours_from_index")
         if len(domain) < 2:

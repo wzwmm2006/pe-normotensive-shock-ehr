@@ -1,8 +1,8 @@
 # Public Release Audit
 
-Audit date: 2026-08-30
+Audit date: 2026-08-31
 
-Repository version: 1.0.0
+Repository version: 1.0.1
 
 ## Required Findings
 
@@ -39,4 +39,4 @@ The repository contains public item mappings, generic local input contracts, ana
 
 SAFE TO PUSH: YES
 
-The repository is safe to commit, tag, and publish as GitHub release v1.0.0. No archival deposit or DOI creation was performed during this pre-release audit.
+The repository is safe to commit, tag, and publish as GitHub release v1.0.1. The cardiac-index repair excludes the NICOM mapping and contains no patient-level record. No v1.0.1 archival deposit or DOI creation was performed during this pre-release audit.

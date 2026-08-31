@@ -1,5 +1,5 @@
 name: strict_normotensive_shock
-version: 1.0.0
+version: 1.0.1
 guideline: "2026 AHA/ACC acute pulmonary embolism guideline"
 analysis_window:
   start_hours_from_index: 0
@@ -20,6 +20,7 @@ strict_domains:
     aggregation: "maximum in-window value"
   creatinine_delta:
     unit: "mg/dL"
+    source_text_note: "The published guideline prints mg/mL; this implementation retains 0.3 and uses the conventional mg/dL unit supported by the SCAI shock definition."
     evaluability: "At least two valid values at distinct times in the 0-24-hour window."
     positive_operator: ">="
     positive_threshold: 0.3
@@ -34,10 +35,12 @@ strict_domains:
     aggregation: "sum over complete window"
   cardiac_index:
     unit: "L/min/m2"
-    evaluability: "At least one valid numeric value in the 0-24-hour window."
+    guideline_measurement: "Derived from peripheral arterial and mixed venous oxygen saturation values."
+    evaluability: "A valid guideline-specified oxygen-saturation-derived value in the 0-24-hour window."
+    source_mapping_status: "Not faithfully computable from the available structured source; MIMIC itemid 228368 is NICOM and is excluded."
     positive_operator: "<="
     positive_threshold: 2.2
-    aggregation: "minimum in-window value"
+    aggregation: "minimum in-window value when a faithful source mapping is available"
 
 phenotype_logic:
   positive: "any strict-domain state is TRUE"
