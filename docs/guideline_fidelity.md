@@ -52,7 +52,8 @@ assumes something the guideline does not specify:
 | Population | n | B1 | B2 | B3 |
 | --- | ---: | ---: | ---: | ---: |
 | MIMIC SBP-filtered cohort | 668 | 133 (19.91%) | 57 (8.53%) | 55 (8.23%) |
-| eICU broad age-restricted cohort | 1,330 | 742 (55.79%) | 288 (21.65%) | 260 (19.55%) |
+| eICU documented-PE SBP-filtered cohort | 1,266 | 699 (55.21%) | 274 (21.64%) | 238 (18.80%) |
+| eICU broad age-restricted cohort | 1,343 | 749 (55.77%) | 295 (21.97%) | 260 (19.36%) |
 
 The spread between baselines is the point: the same records produce materially
 different counts depending on an assumption the guideline leaves open. The

@@ -26,8 +26,8 @@ before any domain is evaluated:
 - MIMIC-IV: admissions with at least one eligible timestamped systolic pressure
   in the 0 to +24 h window after the acute-PE imaging index, and zero observed
   systolic pressures below 90 mmHg.
-- eICU-CRD: first eligible documented-PE ICU stay per patient with the same rule
-  applied over the first 24 h after ICU admission.
+- eICU-CRD: first eligible documented-PE ICU stay per hospital admission with
+  the same rule applied over the first 24 h after ICU admission.
 
 The blood-pressure rule is an operational analysis filter. It is not a
 reconstruction of the guideline hypotension construct, because the greater than

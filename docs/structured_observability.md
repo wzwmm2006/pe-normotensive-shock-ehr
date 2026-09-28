@@ -39,33 +39,33 @@ MIMIC-IV, SBP-filtered cohort (n = 668):
 | 2 | 63 |
 | 3 | 18 |
 
-eICU-CRD, documented-PE SBP-filtered cohort (n = 1,252):
+eICU-CRD, documented-PE SBP-filtered cohort (n = 1,266):
 
 | Evaluable domains | Records |
 | --- | ---: |
-| 0 | 393 |
-| 1 | 623 |
-| 2 | 179 |
-| 3 | 57 |
+| 0 | 409 |
+| 1 | 617 |
+| 2 | 180 |
+| 3 | 60 |
 
 Domain evaluability:
 
 | Domain | MIMIC n (%) | eICU n (%) |
 | --- | ---: | ---: |
-| Lactate | 98 (14.67%) | 179 (14.30%) |
-| Creatinine change | 105 (15.72%) | 215 (17.17%) |
-| Urine output | 88 (13.17%) | 758 (60.54%) |
+| Lactate | 98 (14.67%) | 186 (14.69%) |
+| Creatinine change | 105 (15.72%) | 221 (17.46%) |
+| Urine output | 88 (13.17%) | 750 (59.24%) |
 
 ## 4. Classification states
 
 | State | Rule | MIMIC n (%) | eICU n (%) |
 | --- | --- | ---: | ---: |
-| Positive | at least one domain TRUE | 42 (6.29%) | 204 (16.29%) |
-| Fully observed negative | all three domains FALSE | 13 (1.95%) | 26 (2.08%) |
-| Indeterminate | no TRUE and at least one UNKNOWN | 613 (91.77%) | 1,022 (81.63%) |
+| Positive | at least one domain TRUE | 42 (6.29%) | 207 (16.35%) |
+| Fully observed negative | all three domains FALSE | 13 (1.95%) | 31 (2.45%) |
+| Indeterminate | no TRUE and at least one UNKNOWN | 613 (91.77%) | 1,028 (81.20%) |
 
-Complete case (all three domains evaluable): 18 of 668 (2.69%) in MIMIC and 57
-of 1,252 (4.55%) in eICU.
+Complete case (all three domains evaluable): 18 of 668 (2.69%) in MIMIC and 60
+of 1,266 (4.74%) in eICU.
 
 `Fully observed negative` means that every empirical domain was evaluated and
 none was positive. It is not a negative result for the complete guideline
@@ -75,7 +75,7 @@ construct, which includes a domain that cannot be operationalized here.
 
 Under the simulated scenario, UNKNOWN is mapped to FALSE before the OR rule.
 Records that are indeterminate under three-state handling become apparent
-negatives: 613 of 668 (91.77%) in MIMIC and 1,022 of 1,252 (81.63%) in eICU.
+negatives: 613 of 668 (91.77%) in MIMIC and 1,028 of 1,266 (81.20%) in eICU.
 
 This is a simulated computational scenario. It is not an observed deployed
 system, not a diagnostic error, and not a statement about clinical measurement.
@@ -122,14 +122,14 @@ cardiac-index domain remains UNKNOWN for every record in both databases. See
 ## 7. Between-hospital variation in eICU
 
 For hospitals with at least 20 records in the documented-PE SBP-filtered cohort
-(12 hospitals, 334 records):
+(13 hospitals, 356 records):
 
 | Metric | Median | IQR | Range |
 | --- | ---: | --- | --- |
-| All three domains evaluable | 3.96% | 2.34-11.20% | 0-18.60% |
-| Indeterminate classification | 80.37% | 68.59-87.11% | 60.00-95.45% |
+| All three domains evaluable | 3.12% | 0.00-10.00% | 0-22.73% |
+| Indeterminate classification | 78.26% | 68.75-90.00% | 54.55-95.65% |
 
-Among all 164 hospitals in the cohort, 133 had no record with all three domains
+Among all 164 hospitals in the cohort, 131 had no record with all three domains
 evaluable.
 
 This spread describes variation in structured-data capture. It is not a quality
@@ -140,9 +140,8 @@ published.
 ## 8. Interpretation limits
 
 - Structured UNKNOWN does not mean the measurement was clinically absent.
-- Cross-database differences in single-domain evaluability, most visibly for
-  urine output, are architecture differences and are not compared for
-  prevalence.
+- Cross-database differences in single-domain evaluability reflect differences
+  across data environments and cannot be attributed to EHR architecture alone.
 - The cohorts differ in index time, care setting, and case mix; the comparison is
   descriptive transportability of structured observability.
 - No outcome variable is used anywhere in this repository.

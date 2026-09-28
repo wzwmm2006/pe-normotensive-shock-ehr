@@ -1,7 +1,7 @@
 # Cohort Definitions
 
-The two cohorts answer the same measurement question from different data
-architectures. They are not clinically identical, they use different index times,
+The two cohorts answer the same measurement question in two different data
+environments. They are not clinically identical, they use different index times,
 and they are never compared for prevalence.
 
 ## MIMIC-IV acute PE cohort
@@ -33,7 +33,7 @@ gives 651 admissions and does not materially change the three-domain result.
 
 - Data source: eICU-CRD diagnosis problem list, patient table, vitalPeriodic and
   vitalAperiodic blood pressures, laboratory table, and intakeOutput.
-- Analysis unit: first eligible ICU stay per patient.
+- Analysis unit: first eligible ICU stay per hospital admission.
 - Index time: ICU admission.
 - Cohort name: eICU diagnosis-coded documented-PE cohort. The cohort is diagnosis
   coded and is not imaging confirmed.
@@ -45,28 +45,37 @@ Construction:
 3. Require a documented PE problem row.
 4. Exclude explicit rule-out, suspected, and probable wording.
 5. Never create membership from past-history rows.
-6. Select the first eligible ICU stay per patient.
+6. Select the first eligible ICU stay inside each hospital admission, ordered by
+   the unit visit number counted within that hospital admission.
+
+Stay ordering: eICU `hospitalAdmitOffset` is measured from each unit admission, so
+inside one hospital admission the earlier ICU stay carries the larger (less
+negative) offset; ordering that field ascending would select the later stay, and
+it is therefore never used as chronology. eICU does not provide a reliable way to
+order separate hospital admissions for one patient, so stay selection stops at
+the hospital admission. A per-patient restriction, which keeps 1,240 distinct
+patients, is reported only as a sensitivity analysis.
 
 | Step | Count |
 | --- | --- |
 | PE-coded ICU stays (broad source) | 2,880 |
 | Distinct patients in the broad source | 2,592 |
 | Documented-PE adult ICU stays | 2,680 |
-| First eligible documented stay per patient | 2,411 |
+| First eligible documented stay per hospital admission | 2,487 |
 | Distinct patients | 2,411 |
-| Hospitals in the first-stay pool | 182 |
-| SBP observable inside the first 24 h | 2,380 |
-| SBP-filtered analysis cohort | 1,252 |
-| Distinct patients | 1,252 |
+| Hospitals in the documented pool | 182 |
+| SBP observable inside the first 24 h | 2,454 |
+| SBP-filtered analysis cohort | 1,266 |
+| Distinct patients | 1,240 |
+| Distinct hospital admissions | 2,487 |
 | Hospitals in the filtered cohort | 164 |
 
-Patients younger than 18 years removed by the age rule: 3 of the 2,880 broad
-source stays, 3 of the 2,592 patient-level pool, and 1 of the 1,329 broad
-age-restricted cohort. The broad age-restricted cohort (n = 1,329) is retained as
-a sensitivity analysis only and is not the primary eICU cohort.
+Stays removed by the age rule: 3 of the 2,880 broad PE-coded stays are younger
+than 18 years. The broad age-restricted cohort (n = 1,343) is retained as a
+sensitivity analysis only and is not the primary eICU cohort.
 
-Exclusions after the SBP rule: 31 stays had no eligible blood-pressure
-observation, and 1,128 stays had at least one observed systolic pressure below
+Exclusions after the SBP rule: 33 stays had no eligible blood-pressure
+observation, and 1,188 stays had at least one observed systolic pressure below
 90 mmHg.
 
 ## Recorded cohort descriptors
@@ -88,22 +97,22 @@ MIMIC-IV, SBP-filtered cohort (n = 668 admissions):
 The upper part of the MIMIC age range contains deidentified ages at the source
 ceiling: 11 admissions (1.6%) carry the ceiling value rather than an exact age.
 
-eICU-CRD, documented-PE SBP-filtered cohort (n = 1,252 stays):
+eICU-CRD, documented-PE SBP-filtered cohort (n = 1,266 stays, 1,240 patients):
 
 | Descriptor | Value |
 | --- | --- |
-| Age, mean (SD), years | 61.44 (16.35) |
+| Age, mean (SD), years | 61.34 (16.36) |
 | Age, median (IQR), years | 63 (50-74) |
 | Age, range, years | 18-89 |
-| Female, n (%) | 573 (45.77%) |
-| Male, n (%) | 678 (54.15%) |
+| Female, n (%) | 583 (46.05%) |
+| Male, n (%) | 682 (53.87%) |
 | Sex not recorded, n (%) | 1 (0.08%) |
-| ICU stay, n (%) | 1,252 (100%) by construction |
+| ICU stay, n (%) | 1,266 (100%) by construction |
 | Hospitals | 164 |
 
-ICU type distribution in the eICU cohort: Med-Surg ICU 749 (59.82%), MICU 132
-(10.54%), Cardiac ICU 119 (9.50%), CCU-CTICU 83 (6.63%), SICU 68 (5.43%), CSICU
-40 (3.19%), Neuro ICU 38 (3.04%), CTICU 23 (1.84%).
+ICU type distribution in the eICU cohort: Med-Surg ICU 761 (60.11%), MICU 140
+(11.06%), Cardiac ICU 120 (9.48%), CCU-CTICU 88 (6.95%), SICU 64 (5.06%), CSICU
+36 (2.84%), Neuro ICU 35 (2.76%), CTICU 22 (1.74%).
 
 ## Cross-database comparison rule
 

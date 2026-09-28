@@ -53,8 +53,9 @@ enters the classification.
 
 ### eICU-CRD documented-PE cohort
 
-`patient.csv`: `record_key`, `person_key`, `hospital_key`, `age_years`,
-`hospital_admit_offset_minutes`, and optionally `unit_type`.
+`patient.csv`: `record_key`, `person_key`, `hospital_key`,
+`hospital_admission_key`, `age_years`, `unit_visit_number`, and optionally
+`unit_type` and `hospital_admit_offset_minutes`.
 
 `diagnosis.csv`: `record_key`, `diagnosis_text`.
 
@@ -63,7 +64,9 @@ never create membership; they are carried only as a provenance flag.
 
 Membership requires age at least 18 years and a documented PE problem row, with
 rule-out, suspected, and probable wording excluded. The first eligible ICU stay
-per patient is selected.
+inside each hospital admission is selected, ordered by `unit_visit_number`.
+`hospital_admit_offset_minutes` may be carried for provenance, but it is never
+used as chronology.
 
 ### eICU-CRD blood pressure
 

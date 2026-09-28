@@ -60,28 +60,28 @@ MIMIC-IV, extended creatinine baseline (sensitivity):
 
 eICU-CRD, documented-PE SBP-filtered primary cohort:
 
-- records 1,252; patients 1,252; hospitals 164;
-- depth 0/1/2/3: 393/623/179/57;
-- evaluable lactate/creatinine/urine: 179/215/758;
-- states positive/fully observed negative/indeterminate: 204/26/1,022;
-- complete case 57; negative reclassification under simulated missing-as-false:
-  1,022.
+- records 1,266; patients 1,240; hospitals 164;
+- depth 0/1/2/3: 409/617/180/60;
+- evaluable lactate/creatinine/urine: 186/221/750;
+- states positive/fully observed negative/indeterminate: 207/31/1,028;
+- complete case 60; negative reclassification under simulated missing-as-false:
+  1,028.
 
 eICU-CRD, broad age-restricted cohort (sensitivity only):
 
-- records 1,329; depth 415/654/195/65; evaluable 201/238/800; states
-  219/31/1,079; complete case 65.
+- records 1,343; depth 429/650/197/67; evaluable 207/244/794; states
+  223/35/1,085; complete case 67.
 
 eICU-CRD, extended creatinine baseline (sensitivity):
 
-- records 1,252; creatinine evaluable 709 (56.63%), creatinine positive 34;
-  depth 225/500/435/92; states 214/47/991; complete case 92.
+- records 1,266; creatinine evaluable 745 (58.85%), creatinine positive 34;
+  depth 223/504/440/99; states 218/55/993; complete case 99.
 
-eICU-CRD, hospitals with at least 20 records (n = 334 records, 12 hospitals):
+eICU-CRD, hospitals with at least 20 records (n = 356 records, 13 hospitals):
 
-- all three domains evaluable, median 3.96% (IQR 2.34-11.20%, range 0-18.60%);
-- indeterminate, median 80.37% (IQR 68.59-87.11%, range 60.00-95.45%);
-- hospitals with no all-three-evaluable record: 133 of 164.
+- all three domains evaluable, median 3.12% (IQR 0.00-10.00%, range 0-22.73%);
+- indeterminate, median 78.26% (IQR 68.75-90.00%, range 54.55-95.65%);
+- hospitals with no all-three-evaluable record: 131 of 164.
 
 ## Reproducible and nonredistributable components
 
@@ -100,7 +100,9 @@ prevalence comparison and not an equivalence test.
 
 ## Release status
 
-Version 2.0.0 is the two-database computability and external-replication release
-and corresponds to the redesigned study. Version 1.0.1 remains the historical
-single-database release and is archived at Zenodo under
-https://doi.org/10.5281/zenodo.22183069. That DOI identifies v1.0.1 only.
+Version 2.0.1 is the two-database computability and external-replication release
+and corresponds to the redesigned study. It repairs the eICU ICU-stay selection
+used in v2.0.0; the corrected primary cohort is 1,266 ICU stays in 1,240 patients
+across 164 hospitals. Version 1.0.1 remains the historical single-database
+release and is archived at Zenodo under https://doi.org/10.5281/zenodo.22183069.
+That DOI identifies v1.0.1 only.

@@ -1,5 +1,9 @@
 # v2.0.0 - Two-database computability and external-replication release
 
+> Superseded by v2.0.1, which repairs the eICU ICU-stay selection. The counts in
+> this file describe the v2.0.0 tag and are retained as the historical record.
+
+
 This release accompanies the redesigned two-database analysis of structured-EHR
 computability of guideline-derived hypoperfusion criteria in pulmonary embolism.
 The primary empirical analysis evaluates lactate, creatinine change and urine

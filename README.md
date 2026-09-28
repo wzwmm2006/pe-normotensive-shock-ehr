@@ -53,7 +53,7 @@ Explicitly out of scope:
 ## 3. Final v2 design
 
 - Unit of analysis: MIMIC-IV admissions; eICU-CRD first eligible intensive-care
-  unit stay per patient.
+  unit stay per hospital admission.
 - Index time: MIMIC-IV uses the earliest acute-positive CTPA report time within
   an encounter. eICU-CRD uses ICU admission as the database-specific index.
 - Analysis window: 0 to +24 h relative to the database-specific index.
@@ -66,7 +66,9 @@ Explicitly out of scope:
   observability, not prevalence equivalence.
 
 The two cohorts are not clinically identical, and the two index times are not
-temporally equivalent. The comparison is architecture-level.
+temporally equivalent. The comparison is descriptive transportability across two
+EHR data environments that differ in care setting, index time, and structured
+documentation pathways.
 
 ## 4. MIMIC cohort
 
@@ -125,62 +127,63 @@ Sensitivity analyses (see `docs/reproducibility.md`):
 
 ## 5. eICU replication cohort
 
-Analysis unit: first eligible ICU stay per patient. Cohort name: eICU
+Analysis unit: first eligible ICU stay per hospital admission. Cohort name: eICU
 diagnosis-coded documented-PE cohort. This cohort is diagnosis coded. It is not
 imaging confirmed and is never described as imaging confirmed.
 
 Membership rules: age at least 18 years; a documented PE problem row; explicit
 rule-out, suspected, and probable wording excluded; past-history rows never
-create membership; first eligible ICU stay per patient.
+create membership; first eligible ICU stay per hospital admission.
 
 | Step | Count |
 | --- | --- |
 | Documented-PE adult ICU stays | 2,680 |
-| First eligible documented stay per patient | 2,411 |
-| SBP observable in the window | 2,380 |
-| SBP-filtered analysis cohort | 1,252 |
-| Distinct patients | 1,252 |
+| First eligible documented stay per hospital admission | 2,487 |
+| SBP observable in the window | 2,454 |
+| SBP-filtered analysis cohort | 1,266 |
+| Distinct patients | 1,240 |
+| Distinct hospital admissions | 2,487 |
 | Hospitals | 164 |
 
-Cohort descriptors (n = 1,252): age mean 61.44 (SD 16.35), median 63 (IQR
-50-74, range 18-89); female 573 (45.77%); male 678 (54.15%); sex not recorded 1.
+Cohort descriptors (n = 1,266): age mean 61.34 (SD 16.36), median 63 (IQR
+50-74, range 18-89); female 583 (46.05%); male 682 (53.87%); sex not recorded 1.
 
 Three-domain ascertainment depth:
 
 | Evaluable domains | Records |
 | --- | --- |
-| 0 | 393 |
-| 1 | 623 |
-| 2 | 179 |
-| 3 | 57 |
+| 0 | 409 |
+| 1 | 617 |
+| 2 | 180 |
+| 3 | 60 |
 
 Criterion evaluability:
 
 | Criterion | Evaluable | Percentage |
 | --- | --- | --- |
-| Lactate | 179 | 14.30% |
-| Creatinine change | 215 | 17.17% |
-| Urine output | 758 | 60.54% |
+| Lactate | 186 | 14.69% |
+| Creatinine change | 221 | 17.46% |
+| Urine output | 750 | 59.24% |
 
 Three-domain classification:
 
 | State | Records | Percentage |
 | --- | --- | --- |
-| Positive | 204 | 16.29% |
-| Fully observed negative | 26 | 2.08% |
-| Indeterminate | 1,022 | 81.63% |
+| Positive | 207 | 16.35% |
+| Fully observed negative | 31 | 2.45% |
+| Indeterminate | 1,028 | 81.20% |
 
-Complete case: 57 of 1,252 (4.55%). Negative reclassification under simulated
-missing-as-false semantics: 1,022 of 1,252 (81.63%).
+Complete case: 60 of 1,266 (4.74%). Negative reclassification under simulated
+missing-as-false semantics: 1,028 of 1,266 (81.20%).
 
 Sensitivity analyses:
 
-- Broad age-restricted eICU cohort (n = 1,329), retained as sensitivity only:
-  depth 415/654/195/65; evaluable 201/238/800; states 219/31/1,079; complete
-  case 65.
-- Extended pre-index creatinine baseline: creatinine evaluable 709 (56.63%),
-  creatinine positive 34; depth 225/500/435/92; states 214/47/991; complete
-  case 92.
+- Broad age-restricted eICU cohort (n = 1,343), retained as sensitivity only:
+  depth 429/650/197/67; evaluable 207/244/794; states 223/35/1,085; complete
+  case 67.
+- Extended pre-index creatinine baseline: creatinine evaluable 745 (58.85%),
+  creatinine positive 34; depth 223/504/440/99; states 218/55/993; complete
+  case 99.
 
 ## 6. Guideline-derived criteria
 
@@ -364,6 +367,13 @@ and the automated scan in `tests/test_public_safety.py`.
 
 ## 14. Version history
 
+- **v2.0.1** - cohort-selection repair. The eICU replication cohort is selected
+  per hospital admission, ordered by the unit visit number inside the admission.
+  An audit showed that the hospital admission offset is measured from each unit
+  admission and that the ICU stay identifier does not encode chronology, so
+  neither can order stays inside an admission. The corrected primary cohort is
+  1,266 ICU stays in 1,240 patients across 164 hospitals, and the three-domain
+  result is unchanged in substance.
 - **v2.0.0** - two-database structured-observability and external-replication
   release. Primary empirical analysis moved from the four-domain phenotype to
   three empirical domains; cardiac index became a computability boundary; an
@@ -380,8 +390,8 @@ Historical releases remain recoverable from their Git tags.
 
 ## 15. Citation
 
-Citation metadata are in `CITATION.cff`. A v2.0.0 Zenodo DOI will be added once
-the release has been archived. Until then, cite the GitHub release `v2.0.0`.
+Citation metadata are in `CITATION.cff`. A v2.0.1 Zenodo DOI will be added once
+the release has been archived. Until then, cite the GitHub release `v2.0.1`.
 
 ## 16. License
 

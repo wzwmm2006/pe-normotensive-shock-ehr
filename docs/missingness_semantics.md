@@ -55,10 +55,10 @@ apparent negatives under the simulation.
 
 ## Cross-database totals
 
-| Quantity | MIMIC (n = 668) | eICU (n = 1,252) |
+| Quantity | MIMIC (n = 668) | eICU (n = 1,266) |
 | --- | ---: | ---: |
-| Indeterminate under three-state handling | 613 (91.77%) | 1,022 (81.63%) |
-| Negative reclassification under simulated missing-as-false | 613 (91.77%) | 1,022 (81.63%) |
+| Indeterminate under three-state handling | 613 (91.77%) | 1,028 (81.20%) |
+| Negative reclassification under simulated missing-as-false | 613 (91.77%) | 1,028 (81.20%) |
 
 Positive and fully observed negative states are unaffected by the simulation,
 because they are already resolved under three-state handling.
