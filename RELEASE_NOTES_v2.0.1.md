@@ -56,10 +56,12 @@ carries the larger (less negative) hospital admission offset. No field in eICU
 orders ICU stays inside a hospital admission except the unit visit number, and
 eICU provides no reliable way to order separate hospital admissions of one
 patient. Selection therefore stops at the hospital admission. The 1,266 stays
-come from 1,240 patients; the extra stays are additional eligible hospital
-admissions of 68 patients. Repeated hospital admissions are not treated as
-independent observations in any inferential model, because the analysis is
-descriptive.
+come from 1,240 unique patients. Separate eligible hospital admissions for the
+same patient are retained because eICU does not provide a reliable chronology
+across distinct health-system stays. Before SBP filtering, 68 patients in the
+eligible hospital-admission pool contributed more than one eligible hospital
+admission. No inferential model treating repeated admissions as independent
+observations is fitted, because the analysis is descriptive.
 
 ## Tests
 

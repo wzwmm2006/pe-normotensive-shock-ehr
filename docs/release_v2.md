@@ -42,7 +42,8 @@ and it does not change the scientific conclusion.
   structured source.
 - eICU-CRD multi-hospital replication was added, including site-level
   observability summaries.
-- Creatinine-timing and first-admission-per-patient sensitivities were added.
+- Creatinine-timing sensitivity was added in both databases, and a
+  first-admission-per-patient sensitivity was added for MIMIC-IV.
 - The recovery frontier, leave-one-marker-out dependence, and the
   classification-certainty-inflation framing were removed. The simulation is now
   described as `negative reclassification under simulated missing-as-false

@@ -53,8 +53,10 @@ inside one hospital admission the earlier ICU stay carries the larger (less
 negative) offset; ordering that field ascending would select the later stay, and
 it is therefore never used as chronology. eICU does not provide a reliable way to
 order separate hospital admissions for one patient, so stay selection stops at
-the hospital admission. A per-patient restriction, which keeps 1,240 distinct
-patients, is reported only as a sensitivity analysis.
+the hospital admission. The primary cohort therefore retains separate eligible
+hospital admissions for the same patient; 1,266 stays arise from 1,240 unique
+patients. No inferential model treating repeated admissions as independent
+observations is fitted.
 
 | Step | Count |
 | --- | --- |
