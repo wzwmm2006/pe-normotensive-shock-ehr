@@ -367,7 +367,12 @@ and the automated scan in `tests/test_public_safety.py`.
 
 ## 14. Version history
 
-- **v2.0.1** - cohort-selection repair. The eICU replication cohort is selected
+- **v2.0.2** - documentation provenance clarification for the corrected eICU
+  replication. The description of repeated hospital admissions was clarified and
+  the 68-patient count was scoped to the pre-SBP eligible pool. No analysis code,
+  cohort membership, aggregate result or scientific conclusion changed from
+  v2.0.1.
+- **v2.0.1** - superseded by v2.0.2 for final manuscript reproducibility. Cohort-selection repair. The eICU replication cohort is selected
   per hospital admission, ordered by the unit visit number inside the admission.
   An audit showed that the hospital admission offset is measured from each unit
   admission and that the ICU stay identifier does not encode chronology, so
@@ -392,8 +397,8 @@ Historical releases remain recoverable from their Git tags.
 
 ## 15. Citation
 
-Citation metadata are in `CITATION.cff`. A v2.0.1 Zenodo DOI will be added once
-the release has been archived. Until then, cite the GitHub release `v2.0.1`.
+Citation metadata are in `CITATION.cff`. A v2.0.2 Zenodo DOI will be added once
+the release has been archived. Until then, cite the GitHub release `v2.0.2`.
 
 ## 16. License
 

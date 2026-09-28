@@ -190,5 +190,5 @@ def test_gitignore_covers_local_and_restricted_locations():
 
 def test_citation_does_not_attach_an_old_or_unminted_version_doi():
     citation = read(ROOT / "CITATION.cff")
-    assert "version: 2.0.1" in citation
+    assert "version: 2.0.2" in citation
     assert "\ndoi:" not in citation

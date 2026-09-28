@@ -100,7 +100,7 @@ prevalence comparison and not an equivalence test.
 
 ## Release status
 
-Version 2.0.1 is the two-database computability and external-replication release
+Version 2.0.2 is the two-database computability and external-replication release
 and corresponds to the redesigned study. It repairs the eICU ICU-stay selection
 used in v2.0.0; the corrected primary cohort is 1,266 ICU stays in 1,240 patients
 across 164 hospitals. Version 1.0.1 remains the historical single-database

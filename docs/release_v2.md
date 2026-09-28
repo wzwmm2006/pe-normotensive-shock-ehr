@@ -1,4 +1,4 @@
-# Release v2.0.1
+# Release v2.0.2
 
 ## What this release is
 
@@ -7,6 +7,21 @@ The primary empirical analysis asks how completely guideline-derived
 hypoperfusion criteria in pulmonary embolism can be reconstructed from structured
 EHR data, and whether that structured observability behaves the same way in a
 second data environment.
+
+## What changed in v2.0.2
+
+Documentation only. No analysis code, cohort membership, aggregate result or
+scientific conclusion changed from v2.0.1.
+
+- The primary eICU cohort remains 1,266 eligible ICU stays from 1,240 unique
+  patients across 164 hospitals.
+- Separate eligible hospital admissions for the same patient are retained because
+  eICU does not provide reliable chronology across distinct health-system stays.
+- The 68-patient count refers to the pre-SBP eligible hospital-admission pool,
+  not to the final SBP-filtered primary cohort.
+- The per-patient restriction is no longer described as a sensitivity cohort.
+- The creatinine-timing sensitivity applies to both databases; the
+  first-admission-per-patient sensitivity applies to MIMIC-IV only.
 
 ## What changed in v2.0.1
 
@@ -66,16 +81,20 @@ The v2.0.0 release reported 1,252 eICU stays, depth 393/623/179/57 and 1,022
 indeterminate. Those values are superseded by the table above and are retained
 only in the `v2.0.0` tag and its release notes.
 
-## Historical release
+## Historical releases
+
+v2.0.1 and v2.0.0 remain available from their tags and are not modified. They are
+superseded by v2.0.2 for final manuscript reproducibility.
 
 v1.0.1 remains available and unchanged. It is the single-database
 definition-fidelity repair release and is archived at Zenodo under
 https://doi.org/10.5281/zenodo.22183069. That version-specific DOI identifies
-v1.0.1 only and must not be used to cite v2.0.1.
+v1.0.1 only and must not be used to cite v2.0.2.
 
 ## DOI policy
 
-Do not attach the v1.0.1 DOI to v2.0.1, and do not create a v2.0.1 DOI before
-Zenodo has archived the release. After Zenodo mints the v2.0.1 DOI, add it to the
+Do not attach the v1.0.1 DOI to v2.0.2, and do not create a v2.0.2 DOI before
+Zenodo has archived the release. After Zenodo mints the v2.0.2 DOI, add it to the
 Citation section of `README.md` and to `CITATION.cff` in a small follow-up commit,
-or leave the DOI to the Zenodo record. Do not move the `v2.0.0` or `v2.0.1` tag.
+or leave the DOI to the Zenodo record. Do not move the `v2.0.0`, `v2.0.1` or
+`v2.0.2` tag.

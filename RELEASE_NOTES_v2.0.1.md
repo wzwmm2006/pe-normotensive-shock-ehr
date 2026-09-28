@@ -1,5 +1,8 @@
 # v2.0.1 - eICU cohort-selection correction release
 
+> Superseded by v2.0.2 for final manuscript reproducibility. The results in this
+> file are unchanged; v2.0.2 clarifies the repeated-admission provenance wording.
+
 Version 2.0.1 corrects the eICU cohort-selection procedure used to identify the
 earliest eligible ICU stay within each hospital admission. Version 2.0.0
 incorrectly used ascending hospital-admission offset at the patient level and

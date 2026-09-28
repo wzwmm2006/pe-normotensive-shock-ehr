@@ -1,5 +1,20 @@
 # Changelog
 
+## v2.0.2
+
+Documentation provenance clarification. No analysis code, cohort membership,
+aggregate result or scientific conclusion changed from v2.0.1.
+
+- The repeated-admission provenance of the eICU replication cohort was clarified.
+- The primary eICU cohort remains 1,266 eligible ICU stays from 1,240 unique
+  patients across 164 hospitals.
+- The 68-patient count for patients contributing more than one eligible hospital
+  admission was scoped to the pre-SBP eligible hospital-admission pool, not to
+  the final SBP-filtered primary cohort.
+- The per-patient restriction is no longer described as a sensitivity cohort.
+- The creatinine-timing sensitivity is described as applying to both databases;
+  the first-admission-per-patient sensitivity is described as MIMIC-IV only.
+
 ## v2.0.1
 
 Cohort-selection repair for the eICU replication.
