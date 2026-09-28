@@ -374,7 +374,9 @@ and the automated scan in `tests/test_public_safety.py`.
   neither can order stays inside an admission. The corrected primary cohort is
   1,266 ICU stays in 1,240 patients across 164 hospitals, and the three-domain
   result is unchanged in substance.
-- **v2.0.0** - two-database structured-observability and external-replication
+- **v2.0.0** - superseded by v2.0.1 for final manuscript reproducibility. The
+  v2.0.0 tag is retained unchanged; its eICU cohort used a stay-selection rule
+  that is corrected in v2.0.1. two-database structured-observability and external-replication
   release. Primary empirical analysis moved from the four-domain phenotype to
   three empirical domains; cardiac index became a computability boundary; an
   operational SBP analysis filter replaced the claim of complete guideline
