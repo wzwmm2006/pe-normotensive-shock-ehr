@@ -1,1 +1,1 @@
-"""Public reproducibility scripts for the strict normotensive-shock phenotype."""
+"""Public reproducibility scripts for guideline-derived hypoperfusion observability."""
