@@ -2,61 +2,96 @@
 
 ## Restricted source data
 
-MIMIC and PhysioNet source files are not included. Keep all downloaded tables, notes, derived encounter files, and intermediate matrices in private storage. The repository ignores `data/`, `raw/`, `derived/`, `outputs/`, database files, compressed extracts, and local configuration.
+MIMIC-IV and eICU-CRD source files are not distributed with this repository.
+Keep downloaded tables, note text, derived encounter files, and intermediate
+record-level matrices in private, access-controlled storage. The repository
+ignores `data/`, `raw/`, `derived/`, `outputs/`, `private/`, database files,
+compressed extracts, and the local path configuration.
 
-## Local standardization
+## Standardized local contracts
 
-The scripts accept generic keys so restricted identifiers do not enter public source code. Create these standardized inputs locally after authorized access.
+The scripts read generic standardized columns so that restricted identifiers
+never enter public source code. Build these extracts locally after authorized
+access. Keys are local analysis keys, not source identifiers.
 
-### Acute-positive extension reports
+### MIMIC-IV acute-PE index
 
-Required columns:
+`extension_reports.csv`: `document_key`, `acute_positive`.
 
-- `document_key`: local report linkage key;
-- `acute_positive`: Boolean acute-positive CTPA label.
+`radiology_reports.csv`: `document_key`, `person_key`, `encounter_key`,
+`report_time`.
 
-### Parent radiology reports
+Output: `person_key`, `encounter_key`, `document_key`, `index_time`, where
+`index_time` is the earliest acute-positive CTPA report time inside an encounter.
 
-Required columns:
+### MIMIC-IV blood pressure
 
-- `document_key`;
-- `person_key`;
-- `encounter_key`;
-- `report_time`: authoritative parent radiology time.
+`icu_vitals.csv` and `ed_vitals.csv`: `person_key`, `encounter_key`,
+`observed_time`, `systolic_bp` in mmHg.
 
-### ED and ICU systolic blood pressure
+Use timestamped measurements only. Untimed triage values are not used for the
+study window. Values must be greater than 0 and less than 400 mmHg.
 
-Required columns:
+Output: the index rows plus the eligibility flag, the retained observation count,
+and the number of observed values below 90 mmHg.
 
-- `person_key`;
-- `encounter_key`;
-- `observed_time`;
-- `systolic_bp` in mmHg.
+### MIMIC-IV three-domain matrix
 
-Use timestamped measurements only. Do not use an untimed triage value for the study window.
+`cohort.csv` requires `record_key`.
 
-### Strict-marker events
+`events.csv`: `record_key`, `domain` (`lactate`, `creatinine_delta`,
+`urine_output`), `hours_from_index`, `value` in the unit defined by the
+specification. Creatinine rows carry individual measurements; the script
+computes the serial change.
 
-Required columns:
+`urine_coverage.csv`: `record_key`, `urine_coverage_hours`. Complete urine-output
+evaluability requires at least 24 represented hours.
 
-- `record_key`: local analysis-record key;
-- `domain`: one of `lactate`, `creatinine_delta`, or `urine_output`; `cardiac_index` may be present in generic inputs but is not evaluated without a faithful guideline-specified source mapping;
-- `hours_from_index`: event time relative to the authoritative PE index;
-- `value`: numeric value in the unit defined by the phenotype specification.
+A `cardiac_index` domain may be supplied in generic inputs, but it is never
+evaluated without a faithful guideline-specified source mapping, and it never
+enters the classification.
 
-The creatinine rows contain individual creatinine values; the script calculates the serial change. Urine-output values contain nonnegative event amounts. Apply any source-specific correction mapping during authorized local standardization before the public script is run.
+### eICU-CRD documented-PE cohort
 
-The study source exposed a NICOM cardiac-index item, which did not match the guideline-specified oxygen-saturation-derived measurement. The public builder therefore assigns cardiac index UNKNOWN. A future implementation must document and validate the required measurement provenance before enabling that domain.
+`patient.csv`: `record_key`, `person_key`, `hospital_key`, `age_years`,
+`hospital_admit_offset_minutes`, and optionally `unit_type`.
 
-### Urine observation coverage
+`diagnosis.csv`: `record_key`, `diagnosis_text`.
 
-Required columns:
+`past_history.csv` (optional): `record_key`, `history_text`. Past-history rows
+never create membership; they are carried only as a provenance flag.
 
-- `record_key`;
-- `urine_coverage_hours`: represented structured observation duration.
+Membership requires age at least 18 years and a documented PE problem row, with
+rule-out, suspected, and probable wording excluded. The first eligible ICU stay
+per patient is selected.
 
-Complete urine-output evaluability requires at least 24 represented hours.
+### eICU-CRD blood pressure
+
+`vital_periodic.csv` (invasive) and `vital_aperiodic.csv` (non-invasive):
+`record_key`, `observed_offset_minutes`, `systolic_bp` in mmHg. Offsets are
+minutes from ICU admission.
+
+### eICU-CRD three-domain matrix
+
+`cohort.csv` requires `record_key`.
+
+`events.csv`: `record_key`, `domain`, `minutes_from_offset`, `value`.
+
+`urine_coverage.csv`: `record_key`, `urine_coverage_hours`.
+
+Urine-output amounts must already be restricted to the single `intakeOutput`
+documentation channel during local standardization. The `nurseCharting` label
+with a urine token is a text genitourinary assessment without a numeric volume
+and is not an eligible urine-output source; see `docs/structured_observability.md`.
 
 ## Source mappings
 
-The public item and field mappings are listed in `metadata/variable_dictionary.csv`. Users should verify mappings against the exact source-dataset versions available to them.
+Public item and field mappings are in `metadata/mimic_variable_dictionary.csv`
+and `metadata/eicu_variable_dictionary.csv`. Verify mappings against the exact
+dataset versions available locally; item identifiers are stable within a dataset
+version but not across all of them.
+
+## Local path configuration
+
+Copy `config/paths.example.yaml` to `config/paths.yaml` and replace the
+placeholders. The completed file is ignored by Git and must never be committed.

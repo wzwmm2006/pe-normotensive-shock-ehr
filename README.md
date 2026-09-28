@@ -1,113 +1,392 @@
-# PE Normotensive Shock EHR Phenotype
+# Structured EHR Computability of Guideline-Derived Hypoperfusion Criteria in Pulmonary Embolism
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22183069.svg)](https://doi.org/10.5281/zenodo.22183069)
+This repository contains reproducibility code and public-safe metadata for a
+two-database study evaluating how completely guideline-derived hypoperfusion
+criteria can be reconstructed from structured electronic health record (EHR)
+data in pulmonary embolism (PE).
 
-## Overview
+- MIMIC-IV is the primary imaging-linked acute-PE analysis.
+- eICU-CRD provides independent multi-hospital replication.
+- The primary empirical analysis uses three reconstructable criteria: lactate,
+  creatinine change, and urine output.
+- Cardiac index is a computability boundary. No structured source available to
+  the study carries the measurement provenance the criterion requires, so the
+  domain is never scored as observed.
+- A structured UNKNOWN means the criterion cannot be evaluated from the
+  prespecified structured source inside the prespecified analysis window. It does
+  not mean that a measurement was clinically absent.
+- Missing-as-false is a simulated semantic scenario, not an observed deployed
+  system.
 
-This repository contains the computable phenotype specification and reproducibility code accompanying the manuscript:
+## 1. Overview
 
-> Computability of Guideline-Defined Normotensive Shock in Acute Pulmonary Embolism: Effects of Missing-Data Semantics in Structured EHRs
+The study asks a measurement question, not a prognosis question. Given a
+guideline-derived set of hypoperfusion criteria and two independent structured
+EHR sources, how many records can be resolved into a definite criterion state,
+and does that structured observability behave the same way in a second data
+environment?
 
-The code reconstructs the strict four-domain phenotype, compares three treatments of unavailable criteria, calculates the structural recovery frontier, quantifies positive-classification dependence, and generates aggregate tables and figures. Version 1.0.1 is the definition-fidelity repair release for manuscript submission.
+Two things follow from that question:
 
-## Scientific problem
+1. The primary result is an observability result. Most records cannot be
+   evaluated for all three empirically available criteria inside the analysis
+   window, and a large share cannot be evaluated for any of them.
+2. Treating a non-evaluable criterion as a negative one changes the number of
+   resolved negative records. That change is reported as a simulated semantic
+   scenario, not as an observed system behaviour and not as a clinical error.
 
-The strict phenotype is a disjunctive rule: one observed positive criterion can establish a positive state. A confident negative state requires all four qualifying alternatives to be observed and negative. When observation is incomplete, UNKNOWN is not equivalent to FALSE. The exact amount of incomplete ascertainment depends on the local data architecture; the logical distinction does not.
+No outcome variable is read anywhere in this repository.
 
-## Strict phenotype
+## 2. Study question
 
-Within 0-24 hours after the authoritative pulmonary embolism index:
+> How completely can guideline-derived hypoperfusion criteria in acute pulmonary
+> embolism be reconstructed from structured EHR data, and does that structured
+> observability transport across two independent EHR data environments?
 
-- lactate greater than 2 mmol/L;
-- creatinine increase of at least 0.3 mg/dL within 24 hours;
-- urine output below 720 mL/24 h; or
-- cardiac index at most 2.2 L/min/m2 derived from peripheral arterial and mixed venous oxygen saturation values.
+Explicitly out of scope:
 
-The published guideline reports the creatinine-change unit as mg/mL. The study retained the numerical threshold of 0.3 and used mg/dL, consistent with the conventional SCAI shock definition. The available MIMIC mapping for cardiac index was itemid 228368 (`Cardiac Index (CI NICOM)`), which did not match the guideline-specified measurement provenance. The mapping is excluded and the cardiac-index domain remains UNKNOWN in the study implementation.
+- whether any hypoperfusion criterion was clinically present or absent;
+- whether a patient had shock, deterioration, or any downstream outcome;
+- whether any hospital delivered good or poor care;
+- prevalence comparison between the two cohorts.
 
-The executable specification is in [`phenotype/normotensive_shock_spec.yaml`](phenotype/normotensive_shock_spec.yaml).
+## 3. Final v2 design
 
-## Computational semantics
+- Unit of analysis: MIMIC-IV admissions; eICU-CRD first eligible intensive-care
+  unit stay per patient.
+- Index time: MIMIC-IV uses the earliest acute-positive CTPA report time within
+  an encounter. eICU-CRD uses ICU admission as the database-specific index.
+- Analysis window: 0 to +24 h relative to the database-specific index.
+- Domains scored: lactate, creatinine change, urine output.
+- Domain states: TRUE, FALSE, UNKNOWN.
+- Classification: POSITIVE (any TRUE), FULLY OBSERVED NEGATIVE (all three FALSE),
+  INDETERMINATE (no TRUE and at least one UNKNOWN).
+- Blood pressure: an operational analysis filter, applied before classification.
+- Cross-database comparison: descriptive transportability of structured
+  observability, not prevalence equivalence.
 
-- **Missing-as-false:** maps UNKNOWN to FALSE before applying the OR rule. This is a simulated implementation scenario and is not attributed to a particular clinical system.
-- **Complete-case:** classifies only records with all four domains observed.
-- **Uncertainty-aware three-state:** preserves TRUE, FALSE, and UNKNOWN; assigns POSITIVE for any TRUE, NEGATIVE only for four FALSE values, and INDETERMINATE otherwise.
+The two cohorts are not clinically identical, and the two index times are not
+temporally equivalent. The comparison is architecture-level.
 
-## Repository structure
+## 4. MIMIC cohort
 
-- `phenotype/`: machine-readable phenotype specification.
-- `config/`: local path template; the completed configuration is ignored by Git.
-- `metadata/`: variable and source mapping without patient data.
-- `scripts/`: cohort provenance, blood-pressure ascertainment, marker-state construction, semantics, recovery, dependence, and output generation.
-- `tests/`: synthetic logic tests and aggregate manuscript regression tests.
-- `docs/`: data contracts and reproducibility notes.
-- `examples/`: synthetic marker-state records only.
+Analysis unit: admissions. Source: physician-adjudicated CTPA-report acute PE
+cohort linked to MIMIC-IV-Note radiology reports, with blood-pressure
+augmentation from MIMIC-IV chartevents and MIMIC-IV-ED.
 
-## Data requirements
+| Step | Count |
+| --- | --- |
+| Source cohort (admissions) | 1,337 |
+| SBP observable in the window | 814 |
+| SBP-filtered analysis cohort | 668 |
+| Distinct patients in the filtered cohort | 651 |
 
-This repository does not distribute MIMIC or PhysioNet data. Users must independently obtain authorized access to the relevant dataset versions, complete required training, and comply with applicable data-use terms. Source data must remain in private, access-controlled storage and must never be committed to this repository.
+SBP filter rule: at least one eligible timestamped systolic pressure inside the
+window, and zero observed systolic pressures below 90 mmHg. The retained
+sensitivity rule is fewer than two observed pressures below 90 mmHg.
 
-The public scripts use standardized local column names so that restricted identifiers remain outside version control. See [`docs/data_requirements.md`](docs/data_requirements.md) for the input contracts and [`config/paths.example.yaml`](config/paths.example.yaml) for local path configuration.
+Three-domain ascertainment depth in the 668-admission cohort:
 
-## Reproduction
+| Evaluable domains | Records |
+| --- | --- |
+| 0 | 476 |
+| 1 | 111 |
+| 2 | 63 |
+| 3 | 18 |
 
-Use Python 3.12.10. From the repository root:
+Criterion evaluability:
+
+| Criterion | Evaluable | Percentage |
+| --- | --- | --- |
+| Lactate | 98 | 14.67% |
+| Creatinine change | 105 | 15.72% |
+| Urine output | 88 | 13.17% |
+
+Three-domain classification:
+
+| State | Records | Percentage |
+| --- | --- | --- |
+| Positive | 42 | 6.29% |
+| Fully observed negative | 13 | 1.95% |
+| Indeterminate | 613 | 91.77% |
+
+Complete case (all three criteria evaluable): 18 of 668 (2.69%).
+
+`Fully observed negative` means all three empirical criteria were evaluated and
+none was positive. It is not a statement that the complete guideline construct
+was negative.
+
+Sensitivity analyses (see `docs/reproducibility.md`):
+
+- First eligible admission per patient (651 admissions): depth 461/110/62/18;
+  evaluable 96/104/88; states 41/13/597; complete case 18.
+- Extended pre-index creatinine baseline: creatinine evaluable 185 (27.69%),
+  creatinine positive 11; depth 433/123/88/24; states 48/17/603; complete case 24.
+
+## 5. eICU replication cohort
+
+Analysis unit: first eligible ICU stay per patient. Cohort name: eICU
+diagnosis-coded documented-PE cohort. This cohort is diagnosis coded. It is not
+imaging confirmed and is never described as imaging confirmed.
+
+Membership rules: age at least 18 years; a documented PE problem row; explicit
+rule-out, suspected, and probable wording excluded; past-history rows never
+create membership; first eligible ICU stay per patient.
+
+| Step | Count |
+| --- | --- |
+| Documented-PE adult ICU stays | 2,680 |
+| First eligible documented stay per patient | 2,411 |
+| SBP observable in the window | 2,380 |
+| SBP-filtered analysis cohort | 1,252 |
+| Distinct patients | 1,252 |
+| Hospitals | 164 |
+
+Cohort descriptors (n = 1,252): age mean 61.44 (SD 16.35), median 63 (IQR
+50-74, range 18-89); female 573 (45.77%); male 678 (54.15%); sex not recorded 1.
+
+Three-domain ascertainment depth:
+
+| Evaluable domains | Records |
+| --- | --- |
+| 0 | 393 |
+| 1 | 623 |
+| 2 | 179 |
+| 3 | 57 |
+
+Criterion evaluability:
+
+| Criterion | Evaluable | Percentage |
+| --- | --- | --- |
+| Lactate | 179 | 14.30% |
+| Creatinine change | 215 | 17.17% |
+| Urine output | 758 | 60.54% |
+
+Three-domain classification:
+
+| State | Records | Percentage |
+| --- | --- | --- |
+| Positive | 204 | 16.29% |
+| Fully observed negative | 26 | 2.08% |
+| Indeterminate | 1,022 | 81.63% |
+
+Complete case: 57 of 1,252 (4.55%). Negative reclassification under simulated
+missing-as-false semantics: 1,022 of 1,252 (81.63%).
+
+Sensitivity analyses:
+
+- Broad age-restricted eICU cohort (n = 1,329), retained as sensitivity only:
+  depth 415/654/195/65; evaluable 201/238/800; states 219/31/1,079; complete
+  case 65.
+- Extended pre-index creatinine baseline: creatinine evaluable 709 (56.63%),
+  creatinine positive 34; depth 225/500/435/92; states 214/47/991; complete
+  case 92.
+
+## 6. Guideline-derived criteria
+
+Within 0 to +24 h of the database-specific index:
+
+- lactate above 2 mmol/L (maximum evaluable in-window value);
+- creatinine increase of at least 0.3 mg/dL between two valid measurements at
+  distinct times;
+- urine output below 720 mL/24 h with complete 24 h structured observation.
+
+Terminology notes:
+
+- The published guideline prints the creatinine-change unit as mg/mL. This
+  implementation keeps the numerical threshold of 0.3 and uses mg/dL, consistent
+  with conventional AKI and SCAI usage. It is an operational adaptation and is not
+  described as a literal guideline transcription.
+- The construct is called a `guideline-derived operational phenotype`. It is not
+  called `guideline-faithful`, because one guideline domain cannot be faithfully
+  operationalized from the available structured sources.
+- Absent charting is never treated as zero urine output.
+
+## 7. Cardiac-index boundary
+
+The guideline cardiac-index criterion requires a value derived from peripheral
+arterial and mixed venous oxygen-saturation measurements, at or below
+2.2 L/min/m2.
+
+- In MIMIC-IV the only closely named structured item is `Cardiac Index (CI NICOM)`
+  (itemid 228368). NICOM is a bioreactance measurement and does not carry the
+  required provenance. The mapping is rejected rather than treated as equivalent.
+- In eICU-CRD, monitor-derived and nurse-entered labels exist, including a label
+  named `CI`. They are device output and are not interpretable as the
+  guideline-specified measurement.
+
+Consequence: a required domain of the four-domain construct is UNKNOWN for every
+record. A four-domain fully observed negative state and a four-domain
+complete-case state are therefore structurally impossible, and those zero counts
+are not reported as independent empirical evidence. See
+`phenotype/four_domain_boundary_spec.yaml`.
+
+## 8. Structured observability states
+
+- TRUE: the criterion is evaluable inside the window and meets its positive
+  threshold.
+- FALSE: the criterion is evaluable inside the window and does not meet its
+  positive threshold.
+- UNKNOWN: the criterion cannot be evaluated from the prespecified structured
+  source inside the prespecified analysis window.
+
+UNKNOWN is a statement about structured source coverage. It is not a statement
+about clinical measurement, documentation quality, or care delivered.
+
+Classification rules are stated in
+`phenotype/three_domain_observability_spec.yaml`. The simulated missing-as-false
+scenario maps UNKNOWN to FALSE before the OR rule and is reported only as
+`negative reclassification under simulated missing-as-false semantics`.
+
+## 9. Repository structure
+
+```
+config/paths.example.yaml             local path template (placeholders only)
+phenotype/three_domain_observability_spec.yaml   primary specification
+phenotype/four_domain_boundary_spec.yaml         cardiac-index boundary
+metadata/mimic_variable_dictionary.csv           public MIMIC mappings
+metadata/eicu_variable_dictionary.csv            public eICU mappings
+docs/data_requirements.md                        input contracts
+docs/cohort_definitions.md                       cohort construction
+docs/phenotype_definition.md                     criterion operationalization
+docs/structured_observability.md                 observability and channel audit
+docs/guideline_fidelity.md                       guideline-fidelity assessment
+docs/missingness_semantics.md                    classification scenarios
+docs/reproducibility.md                          ordered workflow and constants
+docs/release_v2.md                               release contents and DOI policy
+scripts/phenotype_core.py                        shared logic
+scripts/build_mimic_*.py                         MIMIC cohort, filter, matrix
+scripts/build_eicu_*.py                          eICU cohort, filter, matrix
+scripts/run_*.py                                 classification and sensitivity
+scripts/generate_v2_aggregate_outputs.py         cross-database aggregates
+tests/                                           synthetic and aggregate tests
+examples/synthetic_three_domain_example.csv      synthetic records only
+```
+
+## 10. Data requirements
+
+MIMIC-IV and eICU-CRD source data are not redistributed. Authorized users must
+obtain access through PhysioNet, complete the required training, and keep source
+extracts in private storage. The scripts read standardized local extracts with
+generic keys, so restricted identifiers never enter version control. Contracts
+are in `docs/data_requirements.md`; local paths are configured from
+`config/paths.example.yaml`.
+
+## 11. Reproduction
 
 ```bash
 python -m venv .venv
 python -m pip install -r requirements.txt
-cp config/paths.example.yaml config/paths.yaml
 ```
 
-Prepare authorized local source extracts using the contracts in `docs/data_requirements.md`, then run:
+Standardize local extracts, then:
 
 ```bash
-python -m scripts.build_authoritative_pe_index \
-  --extension-reports data/extension_reports.csv \
-  --radiology-notes data/radiology_notes.csv \
-  --output derived/authoritative_index.csv
+python -m scripts.build_mimic_pe_index \
+  --extension-reports private/mimic/extension_reports.csv \
+  --radiology-reports private/mimic/radiology_reports.csv \
+  --output derived/mimic_pe_index.csv
 
-python -m scripts.build_bp_ascertainment \
-  --index derived/authoritative_index.csv \
-  --icu-vitals data/icu_vitals.csv \
-  --ed-vitals data/ed_vitals.csv \
-  --output derived/bp_ascertainment.csv
+python -m scripts.build_mimic_sbp_filter \
+  --index derived/mimic_pe_index.csv \
+  --icu-vitals private/mimic/icu_vitals.csv \
+  --ed-vitals private/mimic/ed_vitals.csv \
+  --output derived/mimic_sbp_filter.csv
 
-python -m scripts.build_strict_marker_matrix \
-  --cohort data/normotensive_cohort.csv \
-  --events data/strict_marker_events.csv \
-  --coverage data/urine_coverage.csv \
-  --output derived/strict_marker_matrix.csv
+python -m scripts.build_mimic_three_domain_matrix \
+  --cohort derived/mimic_sbp_filter.csv \
+  --events private/mimic/events.csv \
+  --coverage private/mimic/urine_coverage.csv \
+  --output derived/mimic_matrix.csv
 
-python -m scripts.generate_manuscript_outputs \
-  --input derived/strict_marker_matrix.csv \
-  --output-dir outputs/manuscript
+python -m scripts.build_eicu_documented_pe_cohort \
+  --patient private/eicu/patient.csv \
+  --diagnosis private/eicu/diagnosis.csv \
+  --past-history private/eicu/past_history.csv \
+  --output derived/eicu_cohort.csv
+
+python -m scripts.build_eicu_sbp_filter \
+  --cohort derived/eicu_cohort.csv \
+  --vital-periodic private/eicu/vital_periodic.csv \
+  --vital-aperiodic private/eicu/vital_aperiodic.csv \
+  --output derived/eicu_sbp_filter.csv
+
+python -m scripts.build_eicu_three_domain_matrix \
+  --cohort derived/eicu_sbp_filter.csv \
+  --events private/eicu/events.csv \
+  --coverage private/eicu/urine_coverage.csv \
+  --output derived/eicu_matrix.csv
+
+python -m scripts.run_three_state_classification \
+  --input derived/mimic_matrix.csv --output-dir outputs/mimic_three_state
+
+python -m scripts.run_missingness_semantics \
+  --input derived/eicu_matrix.csv --output-dir outputs/eicu_semantics
+
+python -m scripts.run_site_level_observability \
+  --input derived/eicu_matrix.csv --site-column site_key --output-dir outputs/site_level
+
+python -m scripts.run_creatinine_timing_sensitivity \
+  --events private/mimic/events.csv \
+  --coverage private/mimic/urine_coverage.csv \
+  --cohort derived/mimic_sbp_filter.csv \
+  --output-dir outputs/creatinine_sensitivity
+
+python -m scripts.generate_v2_aggregate_outputs \
+  --mimic-matrix derived/mimic_matrix.csv \
+  --eicu-matrix derived/eicu_matrix.csv \
+  --output-dir outputs/v2_aggregate
 ```
 
-Run the fully public synthetic example without restricted data:
+The synthetic example runs without any restricted data:
 
 ```bash
 python -m scripts.run_missingness_semantics \
-  --input examples/synthetic_marker_example.csv \
+  --input examples/synthetic_three_domain_example.csv \
   --output-dir outputs/synthetic_semantics
 ```
 
-## Testing
+## 12. Testing
 
 ```bash
-pytest -q
+python -m pytest -q
 ```
 
-Tests use synthetic marker states and nonidentifying aggregate manuscript constants only.
+The public suite uses synthetic records and nonidentifying aggregate constants
+only. It does not require restricted source data.
 
-## Citation
+## 13. Public-data safety
 
-Repository citation metadata are provided in [`CITATION.cff`](CITATION.cff). Version 1.0.1 is archived at Zenodo: https://doi.org/10.5281/zenodo.22183069. This version-specific DOI identifies the code used for the repaired manuscript package.
+This repository contains no patient-level rows, no note text, no restricted
+identifiers, no credentials, and no local absolute paths. Aggregate counts and
+synthetic examples are the only data artifacts. See `PUBLIC_RELEASE_AUDIT.md`
+and the automated scan in `tests/test_public_safety.py`.
 
-## License
+## 14. Version history
 
-Repository code is released under the MIT License. This license applies only to the code and documentation authored for this repository. It grants no rights to MIMIC, PhysioNet, or any other source dataset.
+- **v2.0.0** - two-database structured-observability and external-replication
+  release. Primary empirical analysis moved from the four-domain phenotype to
+  three empirical domains; cardiac index became a computability boundary; an
+  operational SBP analysis filter replaced the claim of complete guideline
+  normotension reconstruction; eICU-CRD multi-hospital replication and site-level
+  observability were added.
+- **v1.0.1** - definition-fidelity repair for the original single-database
+  manuscript. Historical release, archived at Zenodo under
+  https://doi.org/10.5281/zenodo.22183069. That version-specific DOI identifies
+  the v1.0.1 code only and does not describe v2.0.0.
+- **v1.0.0** - original manuscript submission release.
 
-## Data use
+Historical releases remain recoverable from their Git tags.
 
-Users are responsible for PhysioNet credentialing, secure storage, and compliance with all source-dataset terms. Do not open an issue containing patient rows, identifiers, timestamps, or restricted source extracts.
+## 15. Citation
+
+Citation metadata are in `CITATION.cff`. A v2.0.0 Zenodo DOI will be added once
+the release has been archived. Until then, cite the GitHub release `v2.0.0`.
+
+## 16. License
+
+Repository code and documentation are released under the MIT License. The license
+grants no rights to MIMIC-IV, eICU-CRD, PhysioNet, or any other source dataset.
+Users are responsible for credentialing, secure storage, and compliance with all
+source-dataset terms. Do not open an issue containing patient rows, identifiers,
+timestamps, or restricted source extracts.

@@ -1,9 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the repository and the accompanying manuscript."
-title: "PE Normotensive Shock EHR Phenotype"
-version: 1.0.1
-date-released: 2026-08-31
-doi: 10.5281/zenodo.22183069
+title: "Structured EHR Computability of Guideline-Derived Hypoperfusion Criteria in Pulmonary Embolism"
+version: 2.0.0
+date-released: 2026-09-28
 type: software
 authors:
   - family-names: Zheng
@@ -16,4 +15,7 @@ keywords:
   - computable phenotype
   - electronic health records
   - pulmonary embolism
+  - structured data
+  - data observability
   - missing data
+  - guideline implementation
