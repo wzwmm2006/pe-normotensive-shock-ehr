@@ -2,8 +2,14 @@
 
 Tokens that describe restricted identifiers are assembled from fragments so that
 this file does not itself contain the literal strings it searches for.
+
+Documentation files are exempt from the plain token-name scan, because ordinary
+prose legitimately says that the release carries no credentials. They are not
+exempt from the stricter credential-assignment scan below, which looks for
+key-value shapes such as an assignment of a secret, rather than for the word.
 """
 
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -40,6 +46,18 @@ CREDENTIAL_TOKENS = (
     "cred" + "ential",
     "coo" + "kie",
 )
+CREDENTIAL_ASSIGNMENT_PATTERNS = (
+    r"pass" + r"word\s*[:=]",
+    r"pass" + r"wd\s*[:=]",
+    r"sec" + r"ret\s*[:=]",
+    r"tok" + r"en\s*[:=]",
+    r"api[_\s-]?" + r"key\s*[:=]",
+    r"coo" + r"kie\s*[:=]",
+    r"bearer\s+[A-Za-z0-9._-]{12,}",
+    r"\b(?:gho|ghp|ghs)_[A-Za-z0-9]{20,}",
+    r"\bsk-[A-Za-z0-9]{16,}",
+    r"BEGIN [A-Z ]*PRIVATE KEY",
+)
 OUTCOME_TOKENS = (
     "mortal" + "ity",
     "hospital_expire" + "_flag",
@@ -52,7 +70,7 @@ OUTCOME_TOKENS = (
 SELF = "test_public_safety.py"
 PATIENT_TOKEN_EXEMPT = {SELF, "PUBLIC_RELEASE_AUDIT.md"}
 CREDENTIAL_TOKEN_EXEMPT = {SELF, "PUBLIC_RELEASE_AUDIT.md", ".gitignore"}
-CREDENTIAL_TOKEN_EXEMPT_SUFFIXES = {".md"}
+DOCUMENTATION_SUFFIXES = {".md", ".txt", ".rst"}
 SKIP_TEXT_SUFFIXES = {".png", ".jpg", ".jpeg", ".pdf", ".ico", ".woff", ".svg"}
 MAX_CSV_ROWS = 50
 
@@ -113,12 +131,24 @@ def test_credential_tokens_stay_out_of_the_release():
     for path, relative in text_files():
         if path.name in CREDENTIAL_TOKEN_EXEMPT:
             continue
-        if path.suffix.lower() in CREDENTIAL_TOKEN_EXEMPT_SUFFIXES:
+        if path.suffix.lower() in DOCUMENTATION_SUFFIXES:
             continue
         text = read(path).lower()
         for token in CREDENTIAL_TOKENS:
             if token in text:
                 offenders.append(f"{relative}: {token}")
+    assert offenders == []
+
+
+def test_credential_assignments_stay_out_of_the_release():
+    offenders = []
+    for path, relative in text_files():
+        if path.name in CREDENTIAL_TOKEN_EXEMPT:
+            continue
+        text = read(path)
+        for pattern in CREDENTIAL_ASSIGNMENT_PATTERNS:
+            if re.search(pattern, text):
+                offenders.append(f"{relative}: /{pattern}/")
     assert offenders == []
 
 
@@ -160,5 +190,5 @@ def test_gitignore_covers_local_and_restricted_locations():
 
 def test_citation_does_not_attach_an_old_or_unminted_version_doi():
     citation = read(ROOT / "CITATION.cff")
-    assert "version: 2.0.0" in citation
+    assert "version: 2.0.1" in citation
     assert "\ndoi:" not in citation
