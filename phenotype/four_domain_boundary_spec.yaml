@@ -1,0 +1,54 @@
+name: four_domain_boundary
+version: 2.0.0
+status: boundary_specification_only
+
+statement: >
+  The complete four-domain guideline-derived construct is not fully
+  reconstructable from the structured sources available to this study. This
+  file documents the boundary. It is not an executable phenotype specification
+  and must not be run as a primary analysis.
+
+guideline_derived_construct:
+  - lactate
+  - creatinine_change
+  - urine_output
+  - guideline_compatible_cardiac_index
+
+requirement:
+  guideline_compatible_cardiac_index:
+    unit: L/min/m2
+    positive_operator: "<="
+    positive_threshold: 2.2
+    measurement_requirement: >
+      Cardiac index derived from peripheral arterial and mixed venous oxygen
+      saturation values.
+
+source_assessment:
+  mimic_iv:
+    faithful_mapping_available: NO
+    detail: >
+      The only closely named structured item is Cardiac Index (CI NICOM),
+      itemid 228368. NICOM is a bioreactance measurement and does not carry the
+      oxygen-saturation-derived provenance the criterion requires. The mapping is
+      rejected rather than treated as equivalent.
+    records_with_faithful_observation: 0
+  eicu_crd:
+    faithful_mapping_available: NO
+    detail: >
+      Monitor-derived cardiac-index and hemodynamic labels exist in the
+      structured tables, including a nurse-entered label named CI, but they are
+      monitor or device output rather than the oxygen-saturation-derived
+      measurement the criterion requires, and their values are not interpretable
+      as a guideline cardiac index.
+    records_with_faithful_observation: 0
+
+consequence:
+  - A required domain of the four-domain construct is UNKNOWN for every record.
+  - Under that condition a four-domain fully observed negative state and a
+    four-domain complete-case state are structurally impossible.
+  - Those zero counts are implied by the boundary and are not reported as
+    independent empirical evidence.
+  - The primary empirical analysis therefore uses the three reconstructable
+    domains, and the cardiac-index domain is reported only as a boundary.
+
+classification: "FOUR-DOMAIN COMPUTABILITY BOUNDARY: NOT FULLY RECONSTRUCTABLE FROM SELECTED STRUCTURED SOURCES"

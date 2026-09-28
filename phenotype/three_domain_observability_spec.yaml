@@ -1,0 +1,99 @@
+name: pe_guideline_hypoperfusion_structured_observability
+version: 2.0.0
+status: primary_empirical_specification
+
+construct: >
+  Three guideline-derived hypoperfusion criteria for acute pulmonary embolism,
+  evaluated only for what the selected structured sources can support.
+  This is a guideline-derived operational construct and is not described as a
+  complete or literal implementation of the guideline phenotype.
+
+analysis_window:
+  primary: "0 to +24 h relative to the database-specific index time"
+  mimic_index: "authoritative acute-positive CTPA report time"
+  eicu_index: "ICU admission time"
+
+domains:
+  lactate:
+    role: primary_empirical
+    unit: mmol/L
+    evaluability: "At least one valid value inside the analysis window."
+    positive_operator: ">"
+    positive_threshold: 2.0
+    aggregation: "maximum in-window value"
+  creatinine_delta:
+    role: primary_empirical
+    unit: mg/dL
+    evaluability: "At least two valid values at distinct times inside the analysis window."
+    positive_operator: ">="
+    positive_threshold: 0.3
+    aggregation: "maximum later in-window value minus the earliest in-window value"
+    unit_note: >
+      The published guideline prints 0.3 mg/mL. This operational adaptation uses
+      0.3 mg/dL and is not a literal transcription of the printed unit.
+    extended_baseline_sensitivity:
+      purpose: "Sensitivity analysis only; not the primary rule."
+      baseline_window: "-24 to 0 h relative to the index time"
+      later_window: "0 to +24 h relative to the index time"
+      maximum_pair_span: "24 h"
+      relationship_to_primary: "The sensitivity contains the primary rule as a subset."
+  urine_output:
+    role: primary_empirical
+    unit: mL/24 h
+    evaluability: "At least one valid nonnegative event and complete 24 h structured observation."
+    positive_operator: "<"
+    positive_threshold: 720
+    aggregation: "sum over the complete window"
+    zero_rule: "Absent charting is never treated as zero output."
+
+cardiac_index:
+  role: computability_boundary
+  guideline_measurement: "Derived from peripheral arterial and mixed venous oxygen saturation."
+  positive_operator: "<="
+  positive_threshold: 2.2
+  unit: L/min/m2
+  state: UNKNOWN
+  reason: >
+    No structured source available to the study carries the measurement
+    provenance the criterion requires. The domain is reported as a boundary,
+    and it never enters the primary three-domain classification.
+  see_also: phenotype/four_domain_boundary_spec.yaml
+
+marker_states:
+  allowed: [TRUE, FALSE, UNKNOWN]
+  TRUE: "Criterion is evaluable inside the window and meets its positive threshold."
+  FALSE: "Criterion is evaluable inside the window and does not meet its positive threshold."
+  UNKNOWN: >
+    Criterion cannot be evaluated from the prespecified structured source inside
+    the prespecified analysis window. UNKNOWN does not mean that a measurement
+    was clinically absent and is not an assertion about care delivered.
+
+classification:
+  three_domain_positive: "at least one domain is TRUE"
+  three_domain_fully_observed_negative: "all three domains are FALSE"
+  three_domain_indeterminate: "no domain is TRUE and at least one domain is UNKNOWN"
+
+implementation_scenarios:
+  missing_as_false:
+    mapping: "UNKNOWN -> FALSE before the OR rule"
+    status: "simulated computational scenario only"
+    preferred_terminology: "negative reclassification under simulated missing-as-false semantics"
+  complete_case:
+    rule: "Classify only records with all three domains evaluable."
+  three_state:
+    rule: "Retain TRUE, FALSE, and UNKNOWN and apply the classification above."
+
+blood_pressure_analysis_filter:
+  role: "operational analysis filter, not guideline normotension"
+  rule: "At least one eligible SBP inside the window and zero observed SBP below 90 mmHg."
+  window: "0 to +24 h relative to the database-specific index time"
+  plausibility_bounds: "greater than 0 and less than 400 mmHg"
+  retained_sensitivity: "fewer than two observed SBP values below 90 mmHg"
+  see_also: docs/guideline_fidelity.md
+
+excluded_from_primary_analysis:
+  - mean arterial pressure
+  - Glasgow Coma Scale
+  - vasopressor use
+  - ventilation
+  - mortality and all other downstream outcomes

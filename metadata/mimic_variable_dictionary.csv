@@ -1,0 +1,12 @@
+variable,database,source_table,item_or_field_ids,unit,operational_role,notes
+pe_index_time,MIMIC-IV,MIMIC-IV-Ext-PE extension report linked to MIMIC-IV-Note radiology,"linkage key; report time",datetime,cohort index,"Earliest acute-positive CTPA report time within an encounter; the extension report supplies the acute-positive label and the parent radiology report supplies the authoritative time"
+systolic_bp_icu,MIMIC-IV,chartevents,"220179;220050;225309",mmHg,blood-pressure analysis filter,"Valid values greater than 0 and less than 400 mmHg inside 0-24 h after the index time"
+systolic_bp_ed,MIMIC-IV-ED,vitalsign,sbp,mmHg,blood-pressure analysis filter,"Timestamped values greater than 0 and less than 400 mmHg inside 0-24 h after the index time; untimed triage values are not used"
+lactate,MIMIC-IV,labevents,50813,mmol/L,primary empirical domain,"Maximum valid in-window value; positive when greater than 2 mmol/L"
+creatinine_delta,MIMIC-IV,labevents,50912,mg/dL,primary empirical domain,"Maximum later in-window value minus the earliest in-window value; at least two distinct measurement times required; positive when at least 0.3 mg/dL"
+urine_output,MIMIC-IV,outputevents,"226559;226560;226561;226584;226563;226564;226565;226567;226557;226558;227488;227489",mL/24 h,primary empirical domain,"Sum of valid nonnegative events with complete 24 h structured observation; positive when below 720 mL/24 h; irrigant volume in (227488) is sign-corrected during local standardization"
+cardiac_index,MIMIC-IV,chartevents,"rejected: 228368 Cardiac Index (CI NICOM)",L/min/m2,computability boundary,"NICOM is a bioreactance measurement and does not carry the peripheral-arterial and mixed-venous oxygen-saturation provenance the guideline criterion requires; the domain is UNKNOWN for every record"
+mean_arterial_pressure,MIMIC-IV,chartevents,not used,none,excluded,"Not part of the three-domain construct"
+glasgow_coma_scale,MIMIC-IV,chartevents,not used,none,excluded,"Not part of the three-domain construct"
+vasoactive_infusion,MIMIC-IV,inputevents,not used,none,excluded,"Not part of the three-domain construct"
+mortality_and_other_outcomes,MIMIC-IV,not used,not used,none,excluded,"No outcome variable is read anywhere in the public pipeline"

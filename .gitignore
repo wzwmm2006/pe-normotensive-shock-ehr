@@ -4,17 +4,28 @@ raw/
 derived/
 outputs/
 cache/
+private/
+source/
+final_qa_private/
 *.parquet
 *.feather
 *.db
 *.duckdb
 *.sqlite
+*.dta
+*.sas7bdat
+*.rds
 *.gz
+*.zip
+*.7z
 *_patient_level*
 *_crosswalk*
 *_cohort_rows*
 *_marker_matrix.csv
 *_authoritative_index.csv
+*record_level*
+*stay_level_private*
+*hospital_level_private*
 
 # Local configuration and credentials
 .env
@@ -38,5 +49,3 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Internal study artifacts
-GATE*

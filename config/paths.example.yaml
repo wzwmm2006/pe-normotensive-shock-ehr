@@ -1,7 +1,21 @@
 # Copy to config/paths.yaml and edit locally. The copied file is ignored by Git.
-mimic_iv_root: "/path/to/mimic-iv"
-mimic_note_root: "/path/to/mimic-iv-note"
-mimic_ed_root: "/path/to/mimic-iv-ed"
-ext_pe_root: "/path/to/mimic-iv-ext-pe"
+# Every value below is a placeholder; no real workstation path belongs in this file.
+
+mimic:
+  pe_extension_reports: "/path/to/mimic-iv-ext-pe/extension_reports.csv"
+  radiology_reports: "/path/to/mimic-iv-note/radiology_reports.csv"
+  ed_vitals: "/path/to/mimic-iv-ed/vitalsign.csv"
+  icu_vitals: "/path/to/mimic-iv/chartevents_vitals.csv"
+  labs: "/path/to/mimic-iv/labevents.csv"
+  urine_output: "/path/to/mimic-iv/outputevents.csv"
+
+eicu:
+  diagnosis: "/path/to/eicu-crd/diagnosis.csv"
+  patient: "/path/to/eicu-crd/patient.csv"
+  vital_periodic: "/path/to/eicu-crd/vitalPeriodic.csv"
+  vital_aperiodic: "/path/to/eicu-crd/vitalAperiodic.csv"
+  labs: "/path/to/eicu-crd/lab.csv"
+  intake_output: "/path/to/eicu-crd/intakeOutput.csv"
+
 working_data_root: "/path/to/private-working-data"
 output_root: "outputs"
