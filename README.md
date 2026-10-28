@@ -50,7 +50,7 @@ Explicitly out of scope:
 - whether any hospital delivered good or poor care;
 - prevalence comparison between the two cohorts.
 
-## 3. Final v2 design
+## 3. Final design
 
 - Unit of analysis: MIMIC-IV admissions; eICU-CRD first eligible intensive-care
   unit stay per hospital admission.
@@ -108,9 +108,9 @@ Three-domain classification:
 
 | State | Records | Percentage |
 | --- | --- | --- |
-| Positive | 42 | 6.29% |
+| Positive | 43 | 6.44% |
 | Fully observed negative | 13 | 1.95% |
-| Indeterminate | 613 | 91.77% |
+| Indeterminate | 612 | 91.62% |
 
 Complete case (all three criteria evaluable): 18 of 668 (2.69%).
 
@@ -255,15 +255,23 @@ docs/phenotype_definition.md                     criterion operationalization
 docs/structured_observability.md                 observability and channel audit
 docs/guideline_fidelity.md                       guideline-fidelity assessment
 docs/missingness_semantics.md                    classification scenarios
-docs/reproducibility.md                          ordered workflow and constants
-docs/release_v2.md                               release contents and DOI policy
+docs/reproducibility.md                          ordered workflow, gate and constants
+docs/release_v2.md                               historical release contents
+docs/release_v3.md                               current release contents
 scripts/phenotype_core.py                        shared logic
 scripts/build_mimic_*.py                         MIMIC cohort, filter, matrix
 scripts/build_eicu_*.py                          eICU cohort, filter, matrix
 scripts/run_*.py                                 classification and sensitivity
 scripts/generate_v2_aggregate_outputs.py         cross-database aggregates
+scripts/topic1222/states.py                      corrected domain and classification logic
+scripts/topic1222/contract.py                    standardised input contract
+scripts/topic1222/gate.py                        frozen-result comparison
+scripts/topic1222/reproduce.py                   reproduction-gate command line
+results/                                         non-identifying aggregate results
 tests/                                           synthetic and aggregate tests
 examples/synthetic_three_domain_example.csv      synthetic records only
+examples/synthetic_contract_matrix.csv           synthetic input-format sample
+examples/synthetic_contract_labs.csv             synthetic input-format sample
 ```
 
 ## 10. Data requirements
@@ -349,6 +357,32 @@ python -m scripts.run_missingness_semantics \
   --output-dir outputs/synthetic_semantics
 ```
 
+### Reproducing the frozen results
+
+`scripts/topic1222/` is the corrected implementation behind the released frozen
+values. It reads two standardised, non-restricted files and recomputes the
+published metrics:
+
+```bash
+python -m scripts.topic1222.reproduce \
+  --matrix private/contract/domain_state_matrix.csv \
+  --labs private/contract/lab_series.csv \
+  --output-dir outputs/reproduction_gate
+```
+
+The contract is described in `scripts/topic1222/contract.py`, the frozen values
+are in `scripts/topic1222/gate.py`, and the non-identifying aggregate results are
+in `results/`. The command exits 0 only when all 16 frozen metrics match the
+published values, and it writes `reproduction_gate.csv`.
+
+Reproduction boundary: the pipeline reproduces the frozen transformation from the
+standardised inputs. It does not re-derive MIMIC-IV or eICU-CRD source tables.
+Rebuilding the standardised inputs from PhysioNet data requires authorized
+PhysioNet access and remains governed by the PhysioNet data-use agreements, so a
+from-scratch reconstruction is not claimed by this repository. Without the
+authorized extract, `examples/synthetic_contract_*.csv` exercises the format and
+the command reports a mismatch on purpose.
+
 ## 12. Testing
 
 ```bash
@@ -367,6 +401,17 @@ and the automated scan in `tests/test_public_safety.py`.
 
 ## 14. Version history
 
+- **v3.0.0** - corrected analysis and public reproduction gate. Publishes the
+  non-restricted Python implementation that reproduces the frozen manuscript
+  results, a standardised input contract, a synthetic format sample, and an
+  automated reproduction gate. Carries four corrections to the v2.0.2 code:
+  serial creatinine change compared in decimal arithmetic (0.4 to 0.7 mg/dL
+  reaches the inclusive 0.3 mg/dL threshold), the eICU ICU-stay identifier kept
+  separate from the patient identifier, both urine states reset and the
+  three-domain classification re-derived for every coverage rule, and the eICU
+  24-hour window handled as 1,440 minutes. Only the creatinine correction changes
+  a frozen count; the MIMIC-IV three-state row becomes 43/13/612 and eICU-CRD is
+  unchanged. Supersedes v2.0.2 for manuscript reproducibility.
 - **v2.0.2** - documentation provenance clarification for the corrected eICU
   replication. The description of repeated hospital admissions was clarified and
   the 68-patient count was scoped to the pre-SBP eligible pool. No analysis code,
@@ -397,8 +442,9 @@ Historical releases remain recoverable from their Git tags.
 
 ## 15. Citation
 
-Citation metadata are in `CITATION.cff`. A v2.0.2 Zenodo DOI will be added once
-the release has been archived. Until then, cite the GitHub release `v2.0.2`.
+Citation metadata are in `CITATION.cff`. A v3.0.0 Zenodo DOI will be added once
+the release has been archived. Until then, cite the GitHub release `v3.0.0`. The
+version-specific v1.0.1 DOI does not describe v3.0.0.
 
 ## 16. License
 

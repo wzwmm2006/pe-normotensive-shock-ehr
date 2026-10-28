@@ -1,0 +1,17 @@
+metric,database,value
+eligible_records,MIMIC-IV,668
+eligible_records,eICU-CRD,1266
+b0_complete_case_records,MIMIC-IV,18
+b0_complete_case_records,eICU-CRD,60
+direct_positive_records,MIMIC-IV,36
+direct_positive_records,eICU-CRD,73
+b0_direct_positive_retained,MIMIC-IV,4 of 36
+b0_direct_positive_retained,eICU-CRD,21 of 73
+b0_three_state_positive_negative_unresolved,MIMIC-IV,43/13/612
+b0_three_state_positive_negative_unresolved,eICU-CRD,207/31/1028
+s3_complete_case_records,MIMIC-IV,15
+s3_complete_case_records,eICU-CRD,14
+s3_direct_positive_retained,MIMIC-IV,3 of 36
+s3_direct_positive_retained,eICU-CRD,6 of 73
+s3_three_state_positive_negative_unresolved,MIMIC-IV,38/12/618
+s3_three_state_positive_negative_unresolved,eICU-CRD,79/8/1179

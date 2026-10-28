@@ -1,5 +1,39 @@
 # Changelog
 
+## v3.0.0
+
+Corrected analysis code and public reproduction gate.
+
+- Publishes the non-restricted Python implementation (`scripts/topic1222/`) that
+  reproduces the frozen two-database results, together with a standardised input
+  contract, a synthetic format sample, non-identifying aggregate results in
+  `results/`, and an automated reproduction gate
+  (`scripts/topic1222/reproduce.py`).
+- Correction 1: serial creatinine change is compared in decimal arithmetic. A
+  rise from 0.4 to 0.7 mg/dL reaches the inclusive >= 0.3 mg/dL threshold, which
+  the earlier binary floating-point comparison missed. eICU-CRD is unaffected;
+  MIMIC-IV reclassifies one record, so its B0 three-state row moves from the
+  v2.0.2 value 42/13/613 to 43/13/612.
+- Correction 2: the eICU-CRD analysis unit is the ICU stay. The ICU-stay
+  identifier is kept separate from the person identifier, and person-level
+  identifiers are never used to pivot, group or de-duplicate the rule
+  cross-tabulations.
+- Correction 3: every urine-coverage rule (B0 and S1-S3) resets both the positive
+  and the negative urine state before the rule is applied, then re-derives the
+  three-domain classification for every record.
+- Correction 4: the eICU-CRD 24-hour window is 1,440 minutes. eICU offsets are
+  minutes, so the full-window test is `>= 1440` minutes, inclusive, converted to
+  hours only for reporting.
+- Frozen values are unchanged from v2.0.2 apart from the MIMIC-IV three-state
+  row: primary cohorts 668 and 1,266; direct-positive laboratory evidence 36 and
+  73; complete case 18 and 60; B0 retention 4 of 36 and 21 of 73; B0 three-state
+  43/13/612 and 207/31/1,028; S3 complete case 15 and 14; S3 retention 3 of 36
+  and 6 of 73; S3 three-state 38/12/618 and 79/8/1,179.
+- The v2.0.2 tag is retained unchanged and is not an implementation of the final
+  results. The scripts under `scripts/` other than `scripts/topic1222/` are the
+  historical v2 pipeline; `scripts/topic1222/` is the corrected pipeline behind
+  the released frozen values.
+
 ## v2.0.2
 
 Documentation provenance clarification. No analysis code, cohort membership,

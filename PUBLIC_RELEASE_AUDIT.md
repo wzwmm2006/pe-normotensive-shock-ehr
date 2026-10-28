@@ -1,8 +1,8 @@
 # Public Release Audit
 
-Audit date: 2026-09-28
+Audit date: 2026-10-28
 
-Repository version: 2.0.2
+Repository version: 3.0.0
 
 ## Required Findings
 
@@ -24,7 +24,7 @@ SYNTHETIC EXAMPLES ONLY: YES
 
 AGGREGATE RESULTS ONLY: YES
 
-TESTS: PASS (54 passed)
+TESTS: PASS (62 passed)
 
 ## Scan Scope
 
@@ -49,7 +49,13 @@ the rest of the suite:
 - no CSV header carries an outcome or patient-key column;
 - every CSV is synthetic or aggregate and has at most 50 rows;
 - the ignore rules cover local and restricted locations;
-- `CITATION.cff` declares version 2.0.2 and carries no DOI.
+- `CITATION.cff` declares version 3.0.0 and carries no DOI.
+
+The synthetic input-format sample in `examples/synthetic_contract_matrix.csv`
+and `examples/synthetic_contract_labs.csv` uses invented record labels A1-A4
+and B1-B3 with domain states only. The aggregate files in `results/` are
+covered by the same row-count and header checks as every other CSV in the
+repository.
 
 Documentation files are exempt from the plain credential-token scan because
 ordinary prose legitimately states that the release carries no credentials. They
@@ -82,5 +88,5 @@ rows.
 SAFE TO PUSH: YES
 
 No restricted artifact was detected. The release is prepared as GitHub release
-v2.0.2. The v1.0.1 DOI is not attached to this version; a v2.0.2 DOI will be
+v3.0.0. The v1.0.1 DOI is not attached to this version; a v3.0.0 DOI will be
 recorded only after Zenodo archives the release.

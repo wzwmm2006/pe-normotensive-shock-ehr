@@ -1,0 +1,14 @@
+database,record_key,analyte,offset_hours,value
+MIMIC-IV,A1,creatinine,1.0,0.4
+MIMIC-IV,A1,creatinine,8.0,0.7
+MIMIC-IV,A1,lactate,2.0,3.5
+MIMIC-IV,A2,creatinine,1.0,1.0
+MIMIC-IV,A2,creatinine,6.0,1.1
+MIMIC-IV,A2,lactate,2.0,1.0
+MIMIC-IV,A3,lactate,3.0,2.0
+eICU-CRD,B1,creatinine,2.0,0.9
+eICU-CRD,B1,creatinine,3.0,1.0
+eICU-CRD,B1,lactate,1.0,4.2
+eICU-CRD,B2,creatinine,1.0,0.4
+eICU-CRD,B2,creatinine,5.0,0.7
+eICU-CRD,B3,lactate,1.0,1.5

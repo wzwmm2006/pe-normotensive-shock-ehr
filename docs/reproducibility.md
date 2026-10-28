@@ -34,10 +34,66 @@ The analysis was validated with Python 3.12.10. Package versions are pinned in
 The cardiac-index domain has no step in this workflow. It is a boundary only; see
 `phenotype/four_domain_boundary_spec.yaml`.
 
+## Corrected pipeline and reproduction gate (v3.0.0)
+
+`scripts/topic1222/` is the corrected implementation behind the released frozen
+values. It carries four corrections to the historical v2 pipeline:
+
+1. serial creatinine change is compared in decimal arithmetic, so a rise from
+   0.4 to 0.7 mg/dL reaches the inclusive `>= 0.3 mg/dL` threshold instead of
+   failing a binary floating-point comparison;
+2. the eICU-CRD analysis unit is the ICU stay, and the ICU-stay identifier is
+   kept separate from the person identifier, so rule cross-tabulations are never
+   pivoted, grouped or de-duplicated by person;
+3. every urine-coverage rule (B0 and S1-S3) resets both the positive and the
+   negative urine state before the rule is applied and re-derives the three-domain
+   classification for every record;
+4. the eICU-CRD 24-hour window is 1,440 minutes, because eICU offsets are
+   minutes, and is converted to hours only for reporting.
+
+The module reads two standardised, non-restricted files and reproduces the frozen
+transformation:
+
+- `scripts/topic1222/contract.py` - the input contract
+  (`domain_state_matrix.csv` and `lab_series.csv`);
+- `scripts/topic1222/states.py` - the domain and classification logic;
+- `scripts/topic1222/gate.py` - the frozen-value comparison;
+- `scripts/topic1222/reproduce.py` - the command line.
+
+```
+python -m scripts.topic1222.reproduce \
+  --matrix private/contract/domain_state_matrix.csv \
+  --labs private/contract/lab_series.csv \
+  --output-dir outputs/reproduction_gate
+```
+
+The command exits 0 only when all 16 frozen metrics match the published values
+and writes `reproduction_gate.csv`. The non-identifying aggregate results are in
+`results/`; the synthetic input-format sample is
+`examples/synthetic_contract_matrix.csv` with `examples/synthetic_contract_labs.csv`.
+
+Reproduction boundary. The pipeline reproduces the frozen transformation from the
+standardised inputs. It does not re-derive MIMIC-IV or eICU-CRD source tables.
+Rebuilding the standardised inputs from PhysioNet data requires authorized
+PhysioNet access and remains governed by the PhysioNet data-use agreements, so a
+from-scratch reconstruction of the whole analysis is not claimed. Without the
+authorized extract, the synthetic sample exercises the input format and the
+command reports a mismatch on purpose.
+
+The corrected pipeline reproduces the frozen manuscript values: MIMIC-IV B0
+three-state 43/13/612 and eICU-CRD 207/31/1,028 under B0, 38/12/618 and
+79/8/1,179 under S3, with complete case 18 and 60 and direct-positive retention
+4 of 36 and 21 of 73 under B0.
+
 ## Aggregate regression constants
 
 The public test suite locks the following nonidentifying aggregate values to
-detect analysis drift. They contain no record-level material.
+detect analysis drift. They contain no record-level material. The values below
+describe the historical v2 pipeline (`scripts/`), whose creatinine comparison was
+in binary floating point; the corrected pipeline in `scripts/topic1222/`
+reproduces the frozen manuscript values, including the MIMIC-IV three-state row
+43/13/612 in place of the v2 value 42/13/613. The eICU-CRD values are identical
+in both pipelines.
 
 MIMIC-IV, SBP-filtered primary cohort:
 
@@ -100,9 +156,11 @@ prevalence comparison and not an equivalence test.
 
 ## Release status
 
-Version 2.0.2 is the two-database computability and external-replication release
-and corresponds to the redesigned study. It repairs the eICU ICU-stay selection
-used in v2.0.0; the corrected primary cohort is 1,266 ICU stays in 1,240 patients
-across 164 hospitals. Version 1.0.1 remains the historical single-database
+Version 3.0.0 is the corrected analysis release. It publishes the non-restricted
+implementation that reproduces the frozen two-database results, a standardised
+input contract, a synthetic format sample, non-identifying aggregate results, and
+an automated reproduction gate. It carries the four corrections listed above.
+Version 2.0.2 remains available from its tag and is not an implementation of the
+final frozen results. Version 1.0.1 remains the historical single-database
 release and is archived at Zenodo under https://doi.org/10.5281/zenodo.22183069.
 That DOI identifies v1.0.1 only.
